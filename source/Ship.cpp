@@ -1696,6 +1696,15 @@ void Ship::Move(vector<Visual> &visuals, list<shared_ptr<Flotsam>> &flotsam)
 		else
 			Messages::Add("Your ship is moving erratically because you do not have enough crew to pilot it.");
 	}
+	else if(heatDamage && Random::Int(100) < (100 / (1 + (600 / heatDamage))) )
+	{
+		pilotError = 30;
+		if(parent.lock() || !isYours)
+			Messages::Add("The " + name + " is moving erratically because it has suffered damage due to heat.");
+		else
+			Messages::Add("Your ship is moving erratically because it has suffered damage due to heat.");
+		
+	}
 	else
 		pilotOkay = 30;
 	
@@ -2008,7 +2017,15 @@ void Ship::DoGeneration()
 	
 	heat -= heat * HeatDissipation();
 	if(heat > MaximumHeat())
+	{
 		isOverheated = true;
+		double safeHeat = attributes.Get("maximum safe heat") / 100;
+		if(heat > safeHeat * MaximumHeat())
+		{
+			hull -= 10 * (heat / MaximumHeat() - safeHeat);
+			double heatDamage += 2 * (heat / MaximumHeat() - safeHeat);
+		}
+	}
 	else if(heat < .9 * MaximumHeat())
 		isOverheated = false;
 	
