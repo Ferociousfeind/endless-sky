@@ -236,6 +236,9 @@ tip "mass with no cargo:"
 tip "mass:"
 	`Mass, in tons. A ship's mass determines how fast it turns and accelerates.`
 
+tip "maximum safe heat:"
+	`The temperature, in degrees, beyond which your ship will start suffering structural damage. All ships temporarily shut off at 100 degrees and remain off until they've cooled to 90 degrees. A higher maximum safe heat also implies extremely high temperatures will damage your ship less.`
+
 tip "operating costs:"
 	`How many credits per day you need to spend to maintain this outfit while it is in active use.`
 
