@@ -2023,7 +2023,7 @@ void Ship::DoGeneration()
 		if(heat > safeHeat * MaximumHeat())
 		{
 			hull -= 10 * (heat / MaximumHeat() - safeHeat);
-			double heatDamage += 2 * (heat / MaximumHeat() - safeHeat);
+			heatDamage += 2 * (heat / MaximumHeat() - safeHeat);
 		}
 	}
 	else if(heat < .9 * MaximumHeat())
