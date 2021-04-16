@@ -1143,6 +1143,7 @@ void Ship::Place(Point position, Point velocity, Angle angle)
 		zoom = 1.;
 	// Make sure various special status values are reset.
 	heat = IdleHeat();
+	heatDamage = 0.;
 	ionization = 0.;
 	disruption = 0.;
 	slowness = 0.;
@@ -1696,7 +1697,7 @@ void Ship::Move(vector<Visual> &visuals, list<shared_ptr<Flotsam>> &flotsam)
 		else
 			Messages::Add("Your ship is moving erratically because you do not have enough crew to pilot it.");
 	}
-	else if(heatDamage && Random::Int(100) < (100 / (1 + (600 / heatDamage))) )
+	else if(heatDamage && Random::Int(100) < (100 / (1 + (3000 / heatDamage))) )
 	{
 		pilotError = 30;
 		if(parent.lock() || !isYours)
@@ -2022,8 +2023,8 @@ void Ship::DoGeneration()
 		double safeHeat = attributes.Get("maximum safe heat") / 100;
 		if(heat > safeHeat * MaximumHeat())
 		{
-			hull -= 10 * (heat / MaximumHeat() - safeHeat);
-			heatDamage += 2 * (heat / MaximumHeat() - safeHeat);
+			heatIntegrity += (heat / MaximumHeat() - safeHeat) / safeHeat;
+			heatIntegrity = min(12000., heatIntegrity);
 		}
 	}
 	else if(heat < .9 * MaximumHeat())
@@ -2659,6 +2660,7 @@ void Ship::Recharge(bool atSpaceport)
 	{
 		crew = min<int>(max(crew, RequiredCrew()), attributes.Get("bunks"));
 		fuel = attributes.Get("fuel capacity");
+		heatIntegrity = 0.;
 	}
 	pilotError = 0;
 	pilotOkay = 0;
@@ -3789,7 +3791,7 @@ int Ship::TakeDamage(const Weapon &weapon, double damageScaling, double distance
 		int disabledDelay = static_cast<int>(attributes.Get("depleted shield delay"));
 		shieldDelay = max(shieldDelay, (shields <= 0. && disabledDelay) ? disabledDelay : static_cast<int>(attributes.Get("shield delay")));
 	}
-	hull -= hullDamage * (1. - shieldFraction);
+	hull -= hullDamage * (1. - shieldFraction) * (1. + heatIntegrity / 600);
 	if(hullDamage && !isDisabled)
 		hullDelay = max(hullDelay, static_cast<int>(attributes.Get("repair delay")));
 	// For the following damage types, the total effect depends on how much is
