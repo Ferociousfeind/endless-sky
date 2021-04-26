@@ -1143,7 +1143,7 @@ void Ship::Place(Point position, Point velocity, Angle angle)
 		zoom = 1.;
 	// Make sure various special status values are reset.
 	heat = IdleHeat();
-	heatDamage = 0.;
+	heatIntegrity = 0.;
 	ionization = 0.;
 	disruption = 0.;
 	slowness = 0.;
