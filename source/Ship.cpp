@@ -2021,7 +2021,7 @@ void Ship::DoGeneration()
 	if(heat > MaximumHeat())
 	{
 		isOverheated = true;
-		double safeHeat = attributes.Get("maximum safe heat") / 100;
+		double safeHeat = attributes.Get("maximum safe heat");
 		if(heat > safeHeat * MaximumHeat())
 		{
 			heatIntegrity += (heat / MaximumHeat() - safeHeat) / safeHeat;
