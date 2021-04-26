@@ -1705,7 +1705,6 @@ void Ship::Move(vector<Visual> &visuals, list<shared_ptr<Flotsam>> &flotsam)
 			Messages::Add("The " + name + " is moving erratically because it has suffered damage due to heat.");
 		else
 			Messages::Add("Your ship is moving erratically because it has suffered damage due to heat.");
-		
 	}
 	else
 		pilotOkay = 30;
