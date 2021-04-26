@@ -531,7 +531,7 @@ private:
 	int crew = 0;
 	int pilotError = 0;
 	int pilotOkay = 0;
-	double heatDamage = 0;
+	double heatIntegrity = 0;
 	
 	// Current status of this particular ship:
 	const System *currentSystem = nullptr;
