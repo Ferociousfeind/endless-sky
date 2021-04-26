@@ -568,11 +568,35 @@ void System::SetDate(const Date &date)
 	
 	for(StellarObject &object : objects)
 	{
-		// "offset" is used to allow binary orbits; the second object is offset
+		// "precession" is used to allow elliptical binary orbits; the second object is precessed
 		// by 180 degrees.
-		object.angle = Angle(now * object.speed + object.offset);
-		object.position = object.angle.Unit() * object.distance;
-		
+		// "offset" is used to allow more organic-looking placements of objects within their
+		// orbits, or for lagrangian-like motion, or multiple objects inhabiting the same orbit.
+		if(object.fardistance)
+		{
+			object.angle = Angle(object.precession);
+			object.position = object.angle.Unit() * ((object.fardistance-object.distance) / 2);
+			
+			object.angle += Angle(now * object.speed + object.offset);
+			double eccentricity = (object.fardistance - object.distance) / (object.fardistance + object.distance);
+			double zigzag = 180 - abs(180 - (now * object.speed));
+			
+			// This formula is terrible, but it is an approximation which is not as
+			// intensive as the actual approximations for Kepler's equation.
+			object.angle += 780 * sin(now * object.speed) * eccentricity * (eccentricity + (zigzag/480))/
+				((1.1 - (eccentricity + (zigzag/480))) + 0.125 * zigzag);
+			object.angle += now * object.speed;
+			
+			double a = object.distance + object.fardistance;
+			double b = sqrt(object.distance * object.fardistance);
+			
+			object.position += ( a * b ) / (sqrt(pow(a * sin(object.angle), 2) + pow(b * cos(object.angle), 2)));
+		}
+		else
+		{
+			object.angle = Angle(now * object.speed + object.offset + object.precession);
+			object.position = object.angle.Unit() * object.distance;
+		}
 		// Because of the order of the vector, the parent's position has always
 		// been updated before this loop reaches any of its children, so:
 		if(object.parent >= 0)
@@ -830,12 +854,25 @@ void System::LoadObject(const DataNode &node, Set<Planet> &planets, int parent)
 				object.isMoon = (!object.isStation && parent >= 0 && !objects[parent].IsStar());
 			}
 		}
-		else if(child.Token(0) == "distance" && child.Size() >= 2)
+		else if(child.Token(0) == "distance" && child.Size() == 2)
 			object.distance = child.Value(1);
+		else if(child.Token(0) == "distance" && child.Size() == 3)
+		{
+			if (child.Value(1) > child.Value(2))
+			{
+				object.fardistance = child.Value(1);
+				object.distance = child.Value(2);
+			} else {
+				object.fardistance = child.Value(2);
+				object.distance = child.Value(1);
+			}
+		}
 		else if(child.Token(0) == "period" && child.Size() >= 2)
 			object.speed = 360. / child.Value(1);
 		else if(child.Token(0) == "offset" && child.Size() >= 2)
 			object.offset = child.Value(1);
+		else if(child.Token(0) == "precession" && child.Size() >= 2)
+			object.precession = child.Value(1);
 		else if(child.Token(0) == "object")
 			LoadObject(child, planets, index);
 		else
