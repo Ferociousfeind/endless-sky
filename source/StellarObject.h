@@ -72,8 +72,10 @@ private:
 	const Planet *planet;
 	
 	double distance;
+	double fardistance;
 	double speed;
 	double offset;
+	double precession;
 	int parent;
 	
 	const std::string *message;
