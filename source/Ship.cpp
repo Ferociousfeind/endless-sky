@@ -1923,8 +1923,8 @@ void Ship::DoGeneration()
 				if(attributes.Get("hull efficiency"))
 				{
 					double totalHullDamage;
-					double hullMultiplier = 1. - (1. / (1. + attributes.Get("hull efficiency") * .05));
-					hullMultiplier = max(1., ((attributes.Get("hull") - totalHullDamage * hullMultiplier) - hull) / hullRemaining);
+					double mult = 1. - (1. / (1. + attributes.Get("hull efficiency") * .05));
+					mult = max(1., ((attributes.Get("hull") - totalHullDamage * mult) - hull) / hullRemaining);
 					
 					double hullAddition = hullRemaining;
 					
@@ -1935,13 +1935,18 @@ void Ship::DoGeneration()
 					if(hullHeat < 0.)
 						hullAddition = min(hullAddition, heat / -hullHeat);
 					
-					hullMultiplier = min(hullMultiplier, hullAddition);
+					mult = min(mult, hullAddition);
 					
-					DoRepair(hullAddition, hullRemaining * hullMultiplier,
+					double adjustedVal = hullRemaining * mult;
+					double adjustedEnergy = hullEnergy * mult;
+					double adjustedFuel = hullFuel * mult;
+					double adjustedHeat = hullHeat * mult;
+					
+					DoRepair(hullAddition, adjustedVal,
 						attributes.Get("hull"),
-						energy, hullEnergy * hullMultiplier,
-						fuel, hullFuel * hullMultiplier,
-						heat, hullHeat * hullMultiplier);
+						energy, adjustedEnergy,
+						fuel, adjustedFuel,
+						heat, adjustedHeat);
 					hullLimit += hullAddition;
 					hull += hullAddition;
 				}
@@ -1988,9 +1993,16 @@ void Ship::DoGeneration()
 					if((shieldsBanked / attributes.Get("shields")) < bankedReq)
 					{
 						double mult = 1.;
-						mult = pow(2, attributes.Get("shield gating") / 10);
-						DoRepair(shieldsBanked * mult, shieldsRemaining, attributes.Get("shields"),
-							 energy, shieldsEnergy * mult, fuel, shieldsFuel * mult, heat, shieldsHeat * mult);
+						mult = pow(2, attributes.Get("shield restart speed") / 10);
+						double adjustedVal = shieldsRemaining * mult;
+						double adjustedEnergy = shieldsEnergy * mult;
+						double adjustedFuel = shieldsFuel * mult;
+						double adjustedHeat = shieldsHeat * mult;
+						DoRepair(shieldsBanked, adjustedVal,
+							attributes.Get("shields"),
+							energy, adjustedEnergy,
+							fuel, adjustedFuel,
+							heat, adjustedHeat);
 					}
 					else
 					{
