@@ -152,6 +152,9 @@ tip "heat protection:"
 tip "hull repair / max:"
 	`Hull repair rate (per second) and total hull strength. Small ships are disabled when their hull strength drops below 45%; larger ships are disabled at 15%.`
 
+tip "hull repair limit:"
+	`The maximum amount of hull that all hull-repairing outfits can repair before needing restocked.`
+
 tip "hull:"
 	`Total hull strength. Small ships are disabled when their hull strength drops below 45%; larger ships are disabled at 15%.`
 
@@ -160,6 +163,9 @@ tip "hull energy:"
 
 tip "hull energy multiplier:"
 	`Modifies the energy consumed when repairing the hull by the given factor.`
+	
+tip "hull efficiency:"
+	`More hull efficiency will increase the amount of damage that hull-repairing outfits can repair. A value of 20 will allow 50% of damage to be recovered, 40 allows 66.6% of total damage, 60 allows 75% of total damage, approaching 100%. A value of 0 allows 100% damage repair.`
 
 tip "hull fuel:"
 	`Fuel consumed per second when repairing the hull.`
@@ -290,6 +296,9 @@ tip "self destruct:"
 tip "sells for:"
 	`What this outfit will sell for, in credits. Outfits and ships will depreciate (lose resale value) over time, and plunder always starts out fully depreciated.`
 
+tip "shield banking:"
+	`If this value is present, shields will "bank" a charge after they've been reduced to zero, before refilling some percent of total shields in one burst. A value of 20 requires half of your full shield capacity to be banked, 40 requires two-thirds, 60 requires three-fourths, 80 requires four-fifths, approaching 100%."
+
 tip "shield energy:"
 	`Energy consumed per second when recharging shields.`
 
@@ -328,6 +337,9 @@ tip "depleted shield delay:"
 
 tip "shield protection:"
 	`Protection against weapons that do shield damage. If you add more than one outfit with this attribute, each additional one is less effective: a total value of 1 results in a 1 percent reduction in shield damage, while a total value of 11 only results in a 10 percent reduction.`
+
+tip "shield restart speed:"
+	`A modifier on shield speed (increased generation and consumption) while shields are broken and recovering. A value of +10 will double shield speed, a value of -10 will halve shield speed.`
 
 tip "slowing protection:"
 	`Protection against weapons that have a slowing effect. If you add more than one outfit with this attribute, each additional one is less effective: a total value of 1 results in a 1 percent reduction in slowing damage, while a total value of 11 only results in a 10 percent reduction.`
