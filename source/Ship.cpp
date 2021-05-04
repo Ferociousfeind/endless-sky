@@ -1982,19 +1982,22 @@ void Ship::DoGeneration()
 				double shieldsBanked;
 				if(!shields)
 					bool shieldsBroken = true;
-				double bankedReq = 1. - (1. / (1. + attributes.Get("shield banking") * .05));
-				if((shieldsBanked / attributes.Get("shields")) < bankedReq)
+				if(shieldsBroken)
 				{
-					double mult = 1.;
-					mult = pow(2, attributes.Get("shield gating") / 10);
-					DoRepair(shieldsBanked * mult, shieldsRemaining, attributes.Get("shields"),
-						 energy, shieldsEnergy * mult, fuel, shieldsFuel * mult, heat, shieldsHeat * mult);
-				}
-				else
-				{
-					shields = shieldsBanked;
-					shieldsBanked = 0.;
-					shieldsBroken = false;
+					double bankedReq = 1. - (1. / (1. + attributes.Get("shield banking") * .05));
+					if((shieldsBanked / attributes.Get("shields")) < bankedReq)
+					{
+						double mult = 1.;
+						mult = pow(2, attributes.Get("shield gating") / 10);
+						DoRepair(shieldsBanked * mult, shieldsRemaining, attributes.Get("shields"),
+							 energy, shieldsEnergy * mult, fuel, shieldsFuel * mult, heat, shieldsHeat * mult);
+					}
+					else
+					{
+						shields = shieldsBanked;
+						shieldsBanked = 0.;
+						shieldsBroken = false;
+					}
 				}
 			}
 			else
@@ -3852,7 +3855,7 @@ int Ship::TakeDamage(const Weapon &weapon, double damageScaling, double distance
 	}
 	hull -= hullDamage * (1. - shieldFraction);
 	if(attributes.Get("hull efficiency"))
-		double totalHullDamage += hullDamage * (1. - shieldFraction);
+		totalHullDamage += hullDamage * (1. - shieldFraction);
 	if(hullDamage && !isDisabled)
 		hullDelay = max(hullDelay, static_cast<int>(attributes.Get("repair delay")));
 	// For the following damage types, the total effect depends on how much is
