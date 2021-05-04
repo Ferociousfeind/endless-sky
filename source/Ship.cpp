@@ -1985,7 +1985,7 @@ void Ship::DoGeneration()
 				if((shieldsBanked / attributes.Get("shields")) < bankedReq)
 				{
 					double mult = 1.;
-					mult = pow(1.1, attributes.Get("shield gating"));
+					mult = pow(2, attributes.Get("shield gating") / 10);
 					DoRepair(shieldsBanked * mult, shieldsRemaining, attributes.Get("shields"),
 						 energy, shieldsEnergy * mult, fuel, shieldsFuel * mult, heat, shieldsHeat * mult);
 				else
