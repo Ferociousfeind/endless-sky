@@ -1917,7 +1917,58 @@ void Ship::DoGeneration()
 		const double hullHeat = (attributes.Get("hull heat") * (1. + attributes.Get("hull heat multiplier"))) / hullAvailable;
 		double hullRemaining = hullAvailable;
 		if(!hullDelay)
-			DoRepair(hull, hullRemaining, attributes.Get("hull"), energy, hullEnergy, fuel, hullFuel, heat, hullHeat);
+		{
+			if(attributes.Get("hull repair limit"))
+			{
+				if(attributes.Get("hull efficiency"))
+				{
+					double totalHullDamage;
+					double hullMultiplier = 1. - (1. / (1. + attributes.Get("hull efficiency") * .05));
+					hullMultiplier = max(1., ((attributes.Get("hull") - totalHullDamage * hullMultiplier) - hull) / hullRemaining);
+					
+					double hullAddition = hullRemaining;
+					
+					if(hullEnergy > 0.)
+						hullAddition = min(available, energy / hullEnergy);
+					if(hullFuel > 0.)
+						hullAddition = min(available, fuel / hullFuel);
+					if(hullHeat < 0.)
+						hullAddition = min(available, heat / -hullHeat);
+					
+					hullMultiplier = min(hullMultiplier, hullAddition);
+					
+					DoRepair(hullAddition, hullRemaining * hullMultiplier,
+						attributes.Get("hull"),
+						energy, hullEnergy * hullMultiplier,
+						fuel, hullFuel * hullMultiplier,
+						heat, hullHeat * hullMultiplier);
+					hullLimit += hullAddition;
+					hull += hullAddition;
+				}
+				else
+				{
+					double hullAddition = 0.;
+					DoRepair(hullAddition, hullRemaining, attributes.Get("hull"), energy, hullEnergy, fuel, hullFuel, heat, hullHeat);
+					hullLimit += hullAddition;
+					if(hullLimit < attributes.Get("hull repair limit"))
+						hull += hullAddition;
+					else
+					{
+						hull += hullLimit - attributes.Get("hull repair limit");
+						hullLimit = attributes.Get("hull repair limit");
+					}
+				}
+			}
+			else if(attributes.Get("hull efficiency"))
+			{
+				double totalHullDamage;
+				double hullMultiplier = 1. - (1. / (1. + attributes.Get("hull efficiency") * .05));
+				DoRepair(hull, hullRemaining, attributes.Get("hull") - totalHullDamage * hullMultiplier,
+					 energy, hullEnergy, fuel, hullFuel, heat, hullHeat);
+			}
+			else
+				DoRepair(hull, hullRemaining, attributes.Get("hull"), energy, hullEnergy, fuel, hullFuel, heat, hullHeat);
+		}
 		
 		const double shieldsAvailable = attributes.Get("shield generation") * (1. + attributes.Get("shield generation multiplier"));
 		const double shieldsEnergy = (attributes.Get("shield energy") * (1. + attributes.Get("shield energy multiplier"))) / shieldsAvailable;
@@ -1925,7 +1976,30 @@ void Ship::DoGeneration()
 		const double shieldsHeat = (attributes.Get("shield heat") * (1. + attributes.Get("shield heat multiplier"))) / shieldsAvailable;
 		double shieldsRemaining = shieldsAvailable;
 		if(!shieldDelay)
-			DoRepair(shields, shieldsRemaining, attributes.Get("shields"), energy, shieldsEnergy, fuel, shieldsFuel, heat, shieldsHeat);
+		{
+			if(attributes.Get("shield banking"))
+			{
+				if(!shields)
+					bool shieldsBroken = true;
+				double bankedReq = 1. - (1. / (1. + attributes.Get("shield banking") * .05));
+				if((shieldsBanked / attributes.Get("shields")) < bankedReq)
+				{
+					double mult = 1.;
+					mult = pow(1.1, attributes.Get("shield gating"));
+					DoRepair(shieldsBanked * mult, shieldsRemaining, attributes.Get("shields"),
+						 energy, shieldsEnergy * mult, fuel, shieldsFuel * mult, heat, shieldsHeat * mult);
+				else
+				{
+					shields = shieldsBanked;
+					shieldsBanked = 0.;
+					shieldsBroken = false;
+				}
+			}
+			else
+			{
+				DoRepair(shields, shieldsRemaining, attributes.Get("shields"), energy, shieldsEnergy, fuel, shieldsFuel, heat, shieldsHeat);
+			}
+		}
 		
 		if(!bays.empty())
 		{
@@ -2643,6 +2717,7 @@ void Ship::Recharge(bool atSpaceport)
 	{
 		crew = min<int>(max(crew, RequiredCrew()), attributes.Get("bunks"));
 		fuel = attributes.Get("fuel capacity");
+		hullLimit = 0.;
 	}
 	pilotError = 0;
 	pilotOkay = 0;
@@ -3774,6 +3849,8 @@ int Ship::TakeDamage(const Weapon &weapon, double damageScaling, double distance
 		shieldDelay = max(shieldDelay, (shields <= 0. && disabledDelay) ? disabledDelay : static_cast<int>(attributes.Get("shield delay")));
 	}
 	hull -= hullDamage * (1. - shieldFraction);
+	if(attributes.Get("hull efficiency"))
+		double totalHullDamage += hullDamage * (1. - shieldFraction);
 	if(hullDamage && !isDisabled)
 		hullDelay = max(hullDelay, static_cast<int>(attributes.Get("repair delay")));
 	// For the following damage types, the total effect depends on how much is
