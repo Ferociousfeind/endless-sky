@@ -515,7 +515,9 @@ private:
 	
 	// Various energy levels:
 	double shields = 0.;
+	double shieldsBanked = 0.;
 	double hull = 0.;
+	double hullLimit = 0;
 	double fuel = 0.;
 	double energy = 0.;
 	double heat = 0.;
@@ -524,6 +526,7 @@ private:
 	double slowness = 0.;
 	// Delays for shield generation and hull repair.
 	int shieldDelay = 0;
+	bool shieldsBroken = false;
 	int hullDelay = 0;
 	// Acceleration can be created by engines, firing weapons, or weapon impacts.
 	Point acceleration;
