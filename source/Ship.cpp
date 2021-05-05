@@ -2844,7 +2844,7 @@ double Ship::Shields() const
 
 
 
-double Ship::BankedShields() const
+double Ship::ShieldsBanked() const
 {
 	double maximum = attributes.Get("shields");
 	return maximum ? min(1., shieldsBanked / maximum) : 0.;
