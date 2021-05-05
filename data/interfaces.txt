@@ -422,7 +422,7 @@ interface "hud"
 		dimensions 70 70
 	ring "banked shields"
 		center -75 155
-		dimensions 125 125
+		dimensions 115 115
 		color "shields"
 		size 1
 	ring "shields"
