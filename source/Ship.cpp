@@ -2844,10 +2844,27 @@ double Ship::Shields() const
 
 
 
+double Ship::BankedShields() const
+{
+	double maximum = attributes.Get("shields");
+	return maximum ? min(1., shieldsBanked / maximum) : 0.;
+}
+
+
+
 double Ship::Hull() const
 {
 	double maximum = attributes.Get("hull");
 	return maximum ? min(1., hull / maximum) : 1.;
+}
+
+
+
+double Ship::FixableHull() const
+{
+	double maximum = attributes.Get("hull");
+	double efficiency = (1. - (1. / (1. + attributes.Get("hull efficiency") * .05)));
+	return maximum ? min(1., 1 - (totalHullDamage * efficiency) / maximum) : 1.;
 }
 
 
