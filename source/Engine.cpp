@@ -652,7 +652,7 @@ void Engine::Step(bool isActive)
 		info.SetBar("hull", flagship->Hull(), 20.);
 		info.SetBar("disabled hull", min(flagship->Hull(), flagship->DisabledHull()), 20.);
 		if(flagship->Attributes().Get("hull efficiency"))
-			info.SetBar("fixable hull", flagship->Hull() - min(0., flagship->FixableHull()));
+			info.SetBar("fixable hull", flagship->Hull() - max(0., flagship->FixableHull()));
 	}
 	info.SetString("credits",
 		Format::Credits(player.Accounts().Credits()) + " credits");
