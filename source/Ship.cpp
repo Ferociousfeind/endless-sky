@@ -1148,6 +1148,7 @@ void Ship::Place(Point position, Point velocity, Angle angle)
 	slowness = 0.;
 	shieldDelay = 0;
 	hullDelay = 0;
+	lowestHull = hull;
 	isInvisible = !HasSprite();
 	jettisoned.clear();
 	hyperspaceCount = 0;
@@ -1923,7 +1924,7 @@ void Ship::DoGeneration()
 				if(attributes.Get("hull efficiency"))
 				{
 					double mult = 1. - (1. / (1. + attributes.Get("hull efficiency") * .05));
-					mult = max(1., ((attributes.Get("hull") - totalHullDamage * mult) - hull) / hullRemaining);
+					mult = max(1., (attributes.Get("hull") - (attributes.Get("hull") - lowestHull) * mult) / attributes.Get("hull"));
 					
 					double hullAddition = hullRemaining;
 					
@@ -1966,7 +1967,7 @@ void Ship::DoGeneration()
 			else if(attributes.Get("hull efficiency"))
 			{
 				double hullMultiplier = 1. - (1. / (1. + attributes.Get("hull efficiency") * .05));
-				DoRepair(hull, hullRemaining, attributes.Get("hull") - totalHullDamage * hullMultiplier,
+				DoRepair(hull, hullRemaining, attributes.Get("hull") - (attributes.Get("hull") - lowestHull) * hullMultiplier,
 					 energy, hullEnergy, fuel, hullFuel, heat, hullHeat);
 			}
 			else
@@ -2751,6 +2752,7 @@ void Ship::Recharge(bool atSpaceport)
 	shieldDelay = 0;
 	hullDelay = 0;
 	hullLimit = 0.;
+	lowestHull = hull;
 }
 
 
@@ -2864,7 +2866,7 @@ double Ship::FixableHull() const
 {
 	double maximum = attributes.Get("hull");
 	double efficiency = (1. - (1. / (1. + attributes.Get("hull efficiency") * .05)));
-	return maximum ? min(1., 1 - (totalHullDamage * efficiency) / maximum) : 1.;
+	return maximum ? min(1., (lowestHull / maximum) + efficiency * (maximum - lowestHull) / maximum) : 1.;
 }
 
 
@@ -3883,7 +3885,10 @@ int Ship::TakeDamage(const Weapon &weapon, double damageScaling, double distance
 	}
 	hull -= hullDamage * (1. - shieldFraction);
 	if(attributes.Get("hull efficiency"))
-		totalHullDamage += hullDamage * (1. - shieldFraction);
+	{
+		if(hull < lowestHull)
+			lowestHull = hull;
+	}
 	if(hullDamage && !isDisabled)
 		hullDelay = max(hullDelay, static_cast<int>(attributes.Get("repair delay")));
 	// For the following damage types, the total effect depends on how much is
