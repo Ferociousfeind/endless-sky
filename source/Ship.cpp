@@ -2733,7 +2733,6 @@ void Ship::Recharge(bool atSpaceport)
 	{
 		crew = min<int>(max(crew, RequiredCrew()), attributes.Get("bunks"));
 		fuel = attributes.Get("fuel capacity");
-		hullLimit = 0.;
 	}
 	pilotError = 0;
 	pilotOkay = 0;
@@ -2751,6 +2750,7 @@ void Ship::Recharge(bool atSpaceport)
 	slowness = 0.;
 	shieldDelay = 0;
 	hullDelay = 0;
+	hullLimit = 0.;
 }
 
 
