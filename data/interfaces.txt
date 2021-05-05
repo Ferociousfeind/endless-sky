@@ -35,6 +35,7 @@ color "logbook line" .2 .2 .2 1.
 
 # Colors used to draw certain HUD elements in-flight.
 color "shields" .43 .55 .70 .75
+color "fixable hull" .6 .6 .6 .3
 color "hull" .70 .62 .43 .75
 color "disabled hull" .3 0 0 .3
 color "heat" .70 .43 .43 .75
@@ -419,10 +420,20 @@ interface "hud"
 	outline "player sprite"
 		center -75 155
 		dimensions 70 70
+	ring "banked shields"
+		center -75 155
+		dimensions 125 125
+		color "shields"
+		size 1
 	ring "shields"
 		center -75 155
 		dimensions 120 120
 		color "shields"
+		size 1.5
+	ring "fixable hull"
+		center -75 155
+		dimensions 110 110
+		color "fixable hull"
 		size 1.5
 	ring "hull"
 		center -75 155
