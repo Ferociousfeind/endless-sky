@@ -520,7 +520,7 @@ private:
 	double shieldsBanked = 0.;
 	double hull = 0.;
 	double hullLimit = 0;
-	double totalHullDamage = 0;
+	double lowestHull = 0;
 	double fuel = 0.;
 	double energy = 0.;
 	double heat = 0.;
