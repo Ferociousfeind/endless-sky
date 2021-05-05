@@ -1922,7 +1922,6 @@ void Ship::DoGeneration()
 			{
 				if(attributes.Get("hull efficiency"))
 				{
-					double totalHullDamage;
 					double mult = 1. - (1. / (1. + attributes.Get("hull efficiency") * .05));
 					mult = max(1., ((attributes.Get("hull") - totalHullDamage * mult) - hull) / hullRemaining);
 					
@@ -1966,7 +1965,6 @@ void Ship::DoGeneration()
 			}
 			else if(attributes.Get("hull efficiency"))
 			{
-				double totalHullDamage;
 				double hullMultiplier = 1. - (1. / (1. + attributes.Get("hull efficiency") * .05));
 				DoRepair(hull, hullRemaining, attributes.Get("hull") - totalHullDamage * hullMultiplier,
 					 energy, hullEnergy, fuel, hullFuel, heat, hullHeat);
@@ -1984,9 +1982,8 @@ void Ship::DoGeneration()
 		{
 			if(attributes.Get("shield banking"))
 			{
-				double shieldsBanked;
 				if(!shields)
-					bool shieldsBroken = true;
+					shieldsBroken = true;
 				if(shieldsBroken)
 				{
 					double bankedReq = 1. - (1. / (1. + attributes.Get("shield banking") * .05));
