@@ -1984,6 +1984,8 @@ void Ship::DoGeneration()
 			{
 				if(!shields)
 					shieldsBroken = true;
+				else
+					DoRepair(shields, shieldsRemaining, attributes.Get("shields"), energy, shieldsEnergy, fuel, shieldsFuel, heat, shieldsHeat);
 				if(shieldsBroken)
 				{
 					double bankedReq = 1. - (1. / (1. + attributes.Get("shield banking") * .05));
