@@ -275,7 +275,9 @@ public:
 	
 	// Get characteristics of this ship, as a fraction between 0 and 1.
 	double Shields() const;
+	double ShieldsBanked() const;
 	double Hull() const;
+	double FixableHull() const;
 	double Fuel() const;
 	double Energy() const;
 	// A ship's heat is generally between 0 and 1, but if it receives
