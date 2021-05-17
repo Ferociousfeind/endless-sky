@@ -3777,6 +3777,8 @@ int Ship::TakeDamage(const Weapon &weapon, double damageScaling, double distance
 		* damageScaling / (1. + attributes.Get("fuel protection"));
 	double heatDamage = (weapon.HeatDamage() + weapon.RelativeHeatDamage() * MaximumHeat())
 		* damageScaling / (1. + attributes.Get("heat protection"));
+	double coolingDamage = weapon.CoolingDamage()
+		* damageScaling / (1. + attributes.Get("heat protection"));
 	double ionDamage = weapon.IonDamage() * damageScaling / (1. + attributes.Get("ion protection"));
 	double disruptionDamage = weapon.DisruptionDamage() * damageScaling / (1. + attributes.Get("disruption protection"));
 	double slowingDamage = weapon.SlowingDamage() * damageScaling / (1. + attributes.Get("slowing protection"));
