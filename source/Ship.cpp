@@ -3807,6 +3807,7 @@ int Ship::TakeDamage(const Weapon &weapon, double damageScaling, double distance
 	energy -= energyDamage * leakage;
 	fuel -= fuelDamage * leakage;
 	heat += heatDamage * leakage;
+	heat -= (heat - (heat / (Mass() + coolingDamage))) * leakage;
 	ionization += ionDamage * leakage;
 	disruption += disruptionDamage * leakage;
 	slowness += slowingDamage * leakage;
