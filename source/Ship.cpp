@@ -2028,8 +2028,12 @@ void Ship::DoGeneration()
 	{
 		isOverheated = true;
 	}
-	else if(heat < 1.8 * MaximumHeat())
+	else if(heat < 1.9 * MaximumHeat())
 		isOverheated = false;
+	if(heat < 0.1 * MaximumHeat))
+		freezing = 10. * (0.1 - heat / MaximumHeat());
+	else
+		freezing = 0.;
 	
 	double maxShields = attributes.Get("shields");
 	shields = min(shields, maxShields);
@@ -3792,7 +3796,7 @@ int Ship::TakeDamage(const Weapon &weapon, double damageScaling, double distance
 		int disabledDelay = static_cast<int>(attributes.Get("depleted shield delay"));
 		shieldDelay = max(shieldDelay, (shields <= 0. && disabledDelay) ? disabledDelay : static_cast<int>(attributes.Get("shield delay")));
 	}
-	hull -= hullDamage * (1. - shieldFraction) * (1. + heatIntegrity / 600);
+	hull -= hullDamage * (1. - shieldFraction) * (1. + heatIntegrity / 600) * (1. + freezing);
 	if(hullDamage && !isDisabled)
 		hullDelay = max(hullDelay, static_cast<int>(attributes.Get("repair delay")));
 	// For the following damage types, the total effect depends on how much is
