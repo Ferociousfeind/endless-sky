@@ -186,6 +186,8 @@ void Weapon::LoadWeapon(const DataNode &node)
 				damage[FUEL_DAMAGE] = value;
 			else if(key == "heat damage")
 				damage[HEAT_DAMAGE] = value;
+			else if (key == "cooling damage")
+				damage[COOLING_DAMAGE] = value;
 			else if(key == "energy damage")
 				damage[ENERGY_DAMAGE] = value;
 			else if(key == "ion damage")
