@@ -2030,7 +2030,7 @@ void Ship::DoGeneration()
 	}
 	else if(heat < 1.9 * MaximumHeat())
 		isOverheated = false;
-	if(heat < 0.1 * MaximumHeat))
+	if(heat < 0.1 * MaximumHeat())
 		freezing = 10. * (0.1 - heat / MaximumHeat());
 	else
 		freezing = 0.;
