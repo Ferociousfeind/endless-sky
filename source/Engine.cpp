@@ -639,13 +639,14 @@ void Engine::Step(bool isActive)
 			flagship->Attributes().Get("fuel capacity") * .01);
 		info.SetBar("energy", flagship->Energy());
 		double heat = flagship->Heat();
-		info.SetBar("heat", min(1., heat));
+		info.SetBar("cold", min(1., 2 * heat));
+		info.SetBar("heat", min(1., 2 * (heat - 0.5)));
 		// If heat is above 100%, draw a second overlaid bar to indicate the
 		// total heat level.
 		if(heat > 1.)
-			info.SetBar("overheat", min(1., heat - 1.));
+			info.SetBar("overheat", min(1., 2 * (heat - 1.)));
 		if(flagship->IsOverheated() && (step / 20) % 2)
-			info.SetBar("overheat blink", min(1., heat));
+			info.SetBar("overheat blink", min(1., 2 * (heat - 0.5)));
 		info.SetBar("shields", flagship->Shields());
 		info.SetBar("hull", flagship->Hull(), 20.);
 		info.SetBar("disabled hull", min(flagship->Hull(), flagship->DisabledHull()), 20.);
