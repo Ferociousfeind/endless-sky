@@ -37,6 +37,7 @@ color "logbook line" .2 .2 .2 1.
 color "shields" .43 .55 .70 .75
 color "hull" .70 .62 .43 .75
 color "disabled hull" .3 0 0 .3
+color "cold" .43 .47 .70 .75
 color "heat" .70 .43 .43 .75
 color "overheat" .70 .61 .43 .75
 color "energy" .6 .6 .6 .75
@@ -443,6 +444,11 @@ interface "hud"
 		from -33.5 415
 		dimensions 0 -192
 		color "energy"
+		size 2
+	bar "cold"
+		from -13.5 403
+		dimensions 0 -192
+		color "cold"
 		size 2
 	bar "heat"
 		from -13.5 403
