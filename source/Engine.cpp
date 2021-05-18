@@ -639,7 +639,7 @@ void Engine::Step(bool isActive)
 			flagship->Attributes().Get("fuel capacity") * .01);
 		info.SetBar("energy", flagship->Energy());
 		double heat = flagship->Heat();
-		info.SetBar("cold", min(1., 2 * heat));
+		info.SetBar("cold", 1 - min(1., 2 * heat));
 		info.SetBar("heat", min(1., 2 * (heat - 0.5)));
 		// If heat is above 100%, draw a second overlaid bar to indicate the
 		// total heat level.
