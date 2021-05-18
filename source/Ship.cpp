@@ -1706,6 +1706,14 @@ void Ship::Move(vector<Visual> &visuals, list<shared_ptr<Flotsam>> &flotsam)
 		else
 			Messages::Add("Your ship is moving erratically because it has suffered damage due to heat.");
 	}
+	else if(freezing && Random::Int(200) < freezing * 100)
+	{
+		pilotError = 10;
+		if(parent.lock() || !isYours)
+			Messages::Add("The " + name + " is moving erratically because of its low temperature.");
+		else
+			Messages::Add("Your ship is moving erratically because of its low temperature.");
+	}
 	else
 		pilotOkay = 30;
 	
