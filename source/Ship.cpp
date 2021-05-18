@@ -2040,13 +2040,11 @@ void Ship::DoGeneration()
 	}
 
 	if(heat > 1.5 * MaximumHeat())
-	{
 		isOverheated = true;
-	}
 	else if(heat < 1.45 * MaximumHeat())
 		isOverheated = false;
-	if(heat < 0.1 * MaximumHeat())
-		freezing = 10. * (0.1 - heat / MaximumHeat());
+	if(heat < 0.05 * MaximumHeat())
+		freezing = 20. * (0.05 - heat / MaximumHeat());
 	else
 		freezing = 0.;
 	
@@ -3859,13 +3857,14 @@ int Ship::TakeDamage(const Weapon &weapon, double damageScaling, double distance
 		type |= ShipEvent::DESTROY;
 	
 	// Inflicted heat damage may also disable a ship, but does not trigger a "DISABLE" event.
-	if(heat > MaximumHeat())
-	{
+	if(heat > 1.5 * MaximumHeat())
 		isOverheated = true;
-		isDisabled = true;
-	}
-	else if(heat < .9 * MaximumHeat())
+	else if(heat < 1.45 * MaximumHeat())
 		isOverheated = false;
+	if(heat < 0.05 * MaximumHeat())
+		freezing = 20. * (0.05 - heat / MaximumHeat());
+	else
+		freezing = 0.;
 	
 	return type;
 }
