@@ -2039,11 +2039,11 @@ void Ship::DoGeneration()
 		heatIntegrity = min(12000., heatIntegrity);
 	}
 
-	if(heat > 2 * MaximumHeat())
+	if(heat > 1.5 * MaximumHeat())
 	{
 		isOverheated = true;
 	}
-	else if(heat < 1.9 * MaximumHeat())
+	else if(heat < 1.45 * MaximumHeat())
 		isOverheated = false;
 	if(heat < 0.1 * MaximumHeat())
 		freezing = 10. * (0.1 - heat / MaximumHeat());
