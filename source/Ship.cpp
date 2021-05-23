@@ -1077,7 +1077,7 @@ vector<string> Ship::FlightCheck() const
 	double jumpDrive = attributes.Get("jump drive");
 	
 	// Report the first error condition that will prevent takeoff:
-	if(IdleHeat() >= MaximumHeat())
+	if(IdleHeat() >= 1.5 * MaximumHeat())
 		checks.emplace_back("overheating!");
 	else if(energy <= 0.)
 		checks.emplace_back("no energy!");
@@ -1091,6 +1091,10 @@ vector<string> Ship::FlightCheck() const
 	// If no errors were found, check all warning conditions:
 	if(checks.empty())
 	{
+		if(IdleHeat() >= MaximumHeat())
+			checks.emplace_back("high heat?");
+		if(IdleHeat() <= 0.05 * MaximumHeat())
+			checks.emplace_back("low heat?");
 		if(!thrust && !reverseThrust)
 			checks.emplace_back("afterburner only?");
 		if(!thrust && !afterburner)
@@ -1145,11 +1149,17 @@ void Ship::Place(Point position, Point velocity, Angle angle)
 	{
 		landingPlanet = nullptr;
 		zoom = parent.lock() ? (-.2 + -.8 * Random::Real()) : 0.;
+		// If landed, ships should take off with nominal heat,
+		// and heat/cool from there, instead of starting at equilibrium.
+		heat = 0.5 * MaximumHeat();
 	}
 	else
+	{
 		zoom = 1.;
+		// If not landed, do start ships at equilibrium.
+		heat = IdleHeat();
+	}
 	// Make sure various special status values are reset.
-	heat = IdleHeat();
 	heatIntegrity = 0.;
 	ionization = 0.;
 	disruption = 0.;
@@ -2704,7 +2714,7 @@ void Ship::Recharge(bool atSpaceport)
 	if(atSpaceport || attributes.Get("energy generation"))
 		energy = attributes.Get("energy capacity");
 	
-	heat = IdleHeat();
+	heat = 0.5 * MaximumHeat();
 	ionization = 0.;
 	disruption = 0.;
 	slowness = 0.;
@@ -3023,7 +3033,7 @@ double Ship::HeatDissipation() const
 // Get the maximum heat level, in heat units (not temperature).
 double Ship::MaximumHeat() const
 {
-	return MAXIMUM_TEMPERATURE * (cargo.Used() + attributes.Mass());
+	return MAXIMUM_TEMPERATURE * (attributes.Mass() + attributes.Get("heatsink"));
 }
 
 
@@ -3336,10 +3346,6 @@ void Ship::Jettison(const string &commodity, int tons)
 {
 	cargo.Remove(commodity, tons);
 	
-	// Jettisoned cargo must carry some of the ship's heat with it. Otherwise
-	// jettisoning cargo would increase the ship's temperature.
-	heat -= tons * MAXIMUM_TEMPERATURE * Heat();
-	
 	for( ; tons > 0; tons -= Flotsam::TONS_PER_BOX)
 		jettisoned.emplace_back(new Flotsam(commodity, (Flotsam::TONS_PER_BOX < tons) ? Flotsam::TONS_PER_BOX : tons));
 }
@@ -3352,11 +3358,6 @@ void Ship::Jettison(const Outfit *outfit, int count)
 		return;
 
 	cargo.Remove(outfit, count);
-	
-	// Jettisoned cargo must carry some of the ship's heat with it. Otherwise
-	// jettisoning cargo would increase the ship's temperature.
-	double mass = outfit->Mass();
-	heat -= count * mass * MAXIMUM_TEMPERATURE * Heat();
 	
 	const int perBox = (mass <= 0.) ? count : (mass > Flotsam::TONS_PER_BOX) ? 1 : static_cast<int>(Flotsam::TONS_PER_BOX / mass);
 	while(count > 0)
