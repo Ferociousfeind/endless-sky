@@ -2033,18 +2033,18 @@ void Ship::DoGeneration()
 	
 	heat -= heat * HeatDissipation();
 
-	if(heat > MaximumHeat())
+	if(Heat() > 1.)
 	{
-		heatIntegrity += heat / MaximumHeat() - 1;
+		heatIntegrity += Heat() - 1;
 		heatIntegrity = min(12000., heatIntegrity);
 	}
 
-	if(heat > 1.5 * MaximumHeat())
+	if(Heat() > 1.5)
 		isOverheated = true;
-	else if(heat < 1.45 * MaximumHeat())
+	else if(Heat() < 1.45)
 		isOverheated = false;
-	if(heat < 0.05 * MaximumHeat())
-		freezing = 20. * (0.05 - heat / MaximumHeat());
+	if(Heat() < 0.05)
+		freezing = 20. * (0.05 - Heat());
 	else
 		freezing = 0.;
 	
@@ -2087,7 +2087,7 @@ void Ship::DoGeneration()
 		energy += attributes.Get("energy generation") - attributes.Get("energy consumption");
 		fuel += attributes.Get("fuel generation");
 		heat += attributes.Get("heat generation");
-		heat -= coolingEfficiency * attributes.Get("cooling") * (heat / MaximumHeat());
+		heat -= coolingEfficiency * attributes.Get("cooling") * Heat();
 		
 		// Convert fuel into energy and heat only when the required amount of fuel is available.
 		if(attributes.Get("fuel consumption") <= fuel)
@@ -2100,7 +2100,7 @@ void Ship::DoGeneration()
 		// Apply active cooling. The fraction of full cooling to apply equals
 		// your ship's current fraction of its maximum temperature.
 		double activeCooling = coolingEfficiency * attributes.Get("active cooling");
-		if(activeCooling > 0. && heat > 0. && energy >= 0.)
+		if(activeCooling > 0. && Heat() > 0.5 && energy >= 0.)
 		{
 			// Although it's a misuse of this feature, handle the case where
 			// "active cooling" does not require any energy.
@@ -2108,11 +2108,25 @@ void Ship::DoGeneration()
 			if(coolingEnergy)
 			{
 				double spentEnergy = min(energy, coolingEnergy * min(1., Heat()));
-				heat -= activeCooling * spentEnergy / coolingEnergy;
+				heat -= activeCooling * Heat() * spentEnergy / coolingEnergy;
 				energy -= spentEnergy;
 			}
 			else
-				heat -= activeCooling * (heat / MaximumHeat());
+				heat -= activeCooling * Heat() * Heat();
+		}
+		double activeHeating = coolingEfficiency * attributes.Get("active heating");
+		double heatingStrength = max(0., 1 - (2 * Heat()));
+		if(activeHeating > 0. && Heat() < 0.5 && energy >= 0.)
+		{
+			double heatingEnergy = attributes.Get("heating energy");
+			if(heatingEnergy)
+			{
+				double spentEnergy = min(energy, heatingEnergy * heatingStrength);
+				heat += activeHeating * spentEnergy / heatingEnergy;
+				energy -= spentEnergy;
+			}
+			else
+				heat += activeHeating * heatingStrength;
 		}
 	}
 	
@@ -2974,15 +2988,26 @@ double Ship::IdleHeat() const
 	double coolingEfficiency = CoolingEfficiency();
 	double cooling = coolingEfficiency * attributes.Get("cooling");
 	double activeCooling = coolingEfficiency * attributes.Get("active cooling");
-	
+	double activeHeating = coolingEfficiency * attributes.Get("active heating");
+
 	// Idle heat is the heat level where:
 	// heat = heat * diss + heatGen - cool - activeCool * heat / (100 * mass)
 	// heat = heat * (diss - activeCool / (100 * mass)) + (heatGen - cool)
 	// heat * (1 - diss + activeCool / (100 * mass)) = (heatGen - cool)
-	double production = max(0., attributes.Get("heat generation") - cooling);
-	double dissipation = HeatDissipation() + activeCooling / MaximumHeat();
-	if(!dissipation) return production ? numeric_limits<double>::max() : 0;
-	return production / dissipation;
+	double production = attributes.Get("heat generation");
+	double dissipation = HeatDissipation() + cooling / MaximumHeat();
+	// If we're passively above 50% heat, only active cooling will be active.
+	// If we're passively below 50% heat, only active heating will be active.
+	// If we're on one side passively, and on the other side with active elements,
+	// the idle temperature will be 50%.
+	if(!dissipation || production / dissipation > MaximumHeat() * 0.5)
+	{
+		dissipation = HeatDissipation() + (cooling + activeCooling) / MaximumHeat();
+		return max(MaximumHeat() * 0.5, production / dissipation);
+	} else {
+		production = attributes.Get("heat generation") + activeHeating;
+		return min(MaximumHeat() * 0.5, production / dissipation);
+	}
 }
 
 
@@ -3857,15 +3882,15 @@ int Ship::TakeDamage(const Weapon &weapon, double damageScaling, double distance
 		type |= ShipEvent::DESTROY;
 	
 	// Inflicted heat damage may also disable a ship, but does not trigger a "DISABLE" event.
-	if(heat > 1.5 * MaximumHeat())
+	if(Heat() > 1.5)
 	{
 		isOverheated = true;
 		isDisabled = true;
 	}
-	else if(heat < 1.45 * MaximumHeat())
+	else if(Heat() < 1.45)
 		isOverheated = false;
-	if(heat < 0.05 * MaximumHeat())
-		freezing = 20. * (0.05 - heat / MaximumHeat());
+	if(Heat() < 0.05)
+		freezing = 20. * (0.05 - Heat());
 	else
 		freezing = 0.;
 	
