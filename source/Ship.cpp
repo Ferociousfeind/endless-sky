@@ -3346,6 +3346,7 @@ void Ship::Jettison(const string &commodity, int tons)
 {
 	cargo.Remove(commodity, tons);
 	
+	double mass = outfit->Mass();
 	for( ; tons > 0; tons -= Flotsam::TONS_PER_BOX)
 		jettisoned.emplace_back(new Flotsam(commodity, (Flotsam::TONS_PER_BOX < tons) ? Flotsam::TONS_PER_BOX : tons));
 }
