@@ -640,11 +640,18 @@ void Engine::Step(bool isActive)
 		info.SetBar("energy", flagship->Energy());
 		double heat = flagship->Heat();
 		info.SetBar("cold", 1 - min(1., 2 * heat));
+		if(heat < 0.05)
+		{
+			info.SetBar("overcold", 1 - min(1., 20 * heat));
+			if((step / 20) % 2)
+				info.SetBar("overcold blink", 1 - min(1., 20 * heat));
+		}
+		
 		info.SetBar("heat", min(1., 2 * (heat - 0.5)));
 		// If heat is above 100%, draw a second overlaid bar to indicate the
 		// total heat level.
 		if(heat > 1.)
-			info.SetBar("overheat", min(1., 2 * (heat - 1.)));
+			info.SetBar("overheat", min(1., 2 * (heat - 0.5)));
 		if(flagship->IsOverheated() && (step / 20) % 2)
 			info.SetBar("overheat blink", min(1., 2 * (heat - 0.5)));
 		info.SetBar("shields", flagship->Shields());
