@@ -280,8 +280,8 @@ void ShipInfoDisplay::UpdateAttributes(const Ship &ship, const Depreciation &dep
 		+ attributes.Get("solar collection")
 		+ attributes.Get("fuel energy")
 		- attributes.Get("energy consumption")
-		- idleHeat ? ((2. * idleHeat -1.) * attributes.Get("cooling energy"))
-		: ((1. -2. * idleHeat) * attributes.Get("heating energy"));
+		- (idleHeat ? ((2. * idleHeat -1.) * attributes.Get("cooling energy"))
+		: ((1. -2. * idleHeat) * attributes.Get("heating energy")));
 	tableLabels.push_back("idle:");
 	energyTable.push_back(Format::Number(60. * idleEnergy));
 	heatTable.push_back(Format::Number(100. * idleHeat));
