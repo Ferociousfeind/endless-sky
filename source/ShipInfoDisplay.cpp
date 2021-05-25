@@ -366,9 +366,15 @@ double ShipInfoDisplay::HeatCalculation(const Ship &ship, const double heating)
 	const double activeCooling = ship.CoolingEfficiency() * attributes.Get("active cooling");
 	double idleHeat = heatGeneration / (heatDissipation + cooling);
 	if(idleHeat < 0.5)
+	{
+		if(!activeHeating)
+			return idleHeat;
 		return (heatGeneration + activeHeating) / (heatDissipation + cooling + 2. * activeHeating);
+	}
 	else if(idleHeat > 0.5)
 	{
+		if(!activeCooling)
+			return idleHeat;
 		if(idleHeat > 1.)
 			return heatGeneration / (heatDissipation + cooling + activeCooling);
 		else
