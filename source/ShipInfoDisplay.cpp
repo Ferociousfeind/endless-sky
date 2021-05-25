@@ -23,6 +23,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "Ship.h"
 #include "text/Table.h"
 
+#include <cmath>
 #include <algorithm>
 #include <map>
 #include <sstream>
