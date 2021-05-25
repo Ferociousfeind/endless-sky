@@ -54,6 +54,7 @@ public:
 private:
 	void UpdateAttributes(const Ship &ship, const Depreciation &depreciation, int day);
 	void UpdateOutfits(const Ship &ship, const Depreciation &depreciation, int day);
+	double HeatCalculation(const Ship &ship, const double heating);
 	
 	
 private:
