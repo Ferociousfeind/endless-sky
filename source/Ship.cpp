@@ -3004,7 +3004,9 @@ double Ship::IdleHeat() const
 	// heat = heat * diss + heatGen - cool - activeCool * heat / (100 * mass)
 	// heat = heat * (diss - activeCool / (100 * mass)) + (heatGen - cool)
 	// heat * (1 - diss + activeCool / (100 * mass)) = (heatGen - cool)
-	double production = attributes.Get("heat generation");
+	double production = attributes.Get("heat generation")
+		+ attributes.Get("fuel heat")
+		+ attributes.Get("solar heat");
 	double dissipation = HeatDissipation() + cooling / MaximumHeat();
 	// If we're passively above 50% heat, only active cooling will be active.
 	// If we're passively below 50% heat, only active heating will be active.
