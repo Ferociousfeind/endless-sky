@@ -360,7 +360,7 @@ double ShipInfoDisplay::HeatCalculation(const Ship &ship, const double heating)
 {
 	const Outfit &attributes = ship.Attributes();
 	const double heatGeneration = heating;
-	const double heatDissipation = 0.1 * ship.Mass() * attributes.Get("heat dissipation");
+	const double heatDissipation = ship.MaximumHeat() * ship.HeatDissipation();
 	const double cooling = ship.CoolingEfficiency() * attributes.Get("cooling");
 	const double activeHeating = ship.CoolingEfficiency() * attributes.Get("active heating");
 	const double activeCooling = ship.CoolingEfficiency() * attributes.Get("active cooling");
