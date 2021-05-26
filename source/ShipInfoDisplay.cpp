@@ -378,11 +378,11 @@ double ShipInfoDisplay::HeatCalculation(const Ship &ship, const double heating)
 		if(idleHeat > 1.)
 			return heatGeneration / (heatDissipation + cooling + activeCooling);
 		else
-			return ((heatDissipation + cooling - activeCooling) +
-				pow(8. * heatGeneration * activeCooling +
-						(heatDissipation - cooling + activeCooling) *
-						(heatDissipation - cooling + activeCooling), 0.5)) /
-						(-4. * activeCooling);
+		{
+			double disc = heatDissipation + cooling - activeCooling;
+			return (-disc + pow(disc * disc +
+				8. * heatGeneration * activeCooling, 0.5)) / (4. * activeCooling);
+		}
 	}
 	return idleHeat;
 }
