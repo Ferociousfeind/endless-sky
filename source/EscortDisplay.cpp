@@ -149,7 +149,11 @@ void EscortDisplay::Draw(const Rectangle &bounds) const
 				bool isSplit = (escort.low[i] != escort.high[i]);
 				const Color &color = (isSplit ? halfColor : fullColor)[i];
 				
-				Point to = from + Point(width * min(1., escort.high[i]), 0.);
+				Point to = from;
+				if(i == 3.)
+					to += Point(width * min(1., escort.high[i] * 2. / 3.), 0.);
+				else
+					to += Point(width * min(1., escort.high[i]), 0.);
 				LineShader::Draw(from, to, 1.5f, color);
 				
 				if(isSplit)
