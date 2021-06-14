@@ -222,7 +222,6 @@ public:
 	// Check the status of this ship.
 	bool IsCapturable() const;
 	bool IsTargetable() const;
-	bool IsOverheated() const;
 	bool IsDisabled() const;
 	bool IsBoarding() const;
 	bool IsLanding() const;
@@ -466,7 +465,6 @@ private:
 	bool isYours = false;
 	bool isParked = false;
 	bool shouldDeploy = false;
-	bool isOverheated = false;
 	bool isDisabled = false;
 	bool isBoarding = false;
 	bool hasBoarded = false;
