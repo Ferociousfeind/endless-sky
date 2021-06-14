@@ -2048,11 +2048,7 @@ void Ship::DoGeneration()
 		heatIntegrity += Heat() - 1;
 		heatIntegrity = min(12000., heatIntegrity);
 	}
-
-	if(Heat() > 1.5)
-		isOverheated = true;
-	else if(Heat() < 1.45)
-		isOverheated = false;
+	
 	if(Heat() < 0.05)
 		freezing = 20. * (0.05 - Heat());
 	else
@@ -2063,7 +2059,7 @@ void Ship::DoGeneration()
 	double maxHull = attributes.Get("hull");
 	hull = min(hull, maxHull);
 	
-	isDisabled = isOverheated || hull < MinimumHull() || (!crew && RequiredCrew());
+	isDisabled = hull < MinimumHull() || (!crew && RequiredCrew());
 	
 	// Whenever not actively scanning, the amount of scan information the ship
 	// has "decays" over time. For a scanner with a speed of 1, one second of
@@ -3884,19 +3880,6 @@ int Ship::TakeDamage(const Weapon &weapon, double damageScaling, double distance
 	}
 	if(!wasDestroyed && IsDestroyed())
 		type |= ShipEvent::DESTROY;
-	
-	// Inflicted heat damage may also disable a ship, but does not trigger a "DISABLE" event.
-	if(Heat() > 1.5)
-	{
-		isOverheated = true;
-		isDisabled = true;
-	}
-	else if(Heat() < 1.45)
-		isOverheated = false;
-	if(Heat() < 0.05)
-		freezing = 20. * (0.05 - Heat());
-	else
-		freezing = 0.;
 	
 	return type;
 }
