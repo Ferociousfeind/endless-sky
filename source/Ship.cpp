@@ -2475,13 +2475,6 @@ bool Ship::IsTargetable() const
 
 
 
-bool Ship::IsOverheated() const
-{
-	return isOverheated;
-}
-
-
-
 bool Ship::IsDisabled() const
 {
 	if(!isDisabled)
@@ -3366,7 +3359,6 @@ void Ship::Jettison(const string &commodity, int tons)
 {
 	cargo.Remove(commodity, tons);
 	
-	double mass = outfit->Mass();
 	for( ; tons > 0; tons -= Flotsam::TONS_PER_BOX)
 		jettisoned.emplace_back(new Flotsam(commodity, (Flotsam::TONS_PER_BOX < tons) ? Flotsam::TONS_PER_BOX : tons));
 }
@@ -3377,8 +3369,10 @@ void Ship::Jettison(const Outfit *outfit, int count)
 {
 	if(count < 0)
 		return;
-
+	
 	cargo.Remove(outfit, count);
+	
+	double mass = outfit->Mass();
 	
 	const int perBox = (mass <= 0.) ? count : (mass > Flotsam::TONS_PER_BOX) ? 1 : static_cast<int>(Flotsam::TONS_PER_BOX / mass);
 	while(count > 0)
