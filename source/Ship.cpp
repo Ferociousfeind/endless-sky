@@ -1709,30 +1709,52 @@ void Ship::Move(vector<Visual> &visuals, list<shared_ptr<Flotsam>> &flotsam)
 	}
 	else if(requiredCrew && static_cast<int>(Random::Int(requiredCrew)) >= Crew())
 	{
-		pilotError = 30;
-		if(parent.lock() || !isYours)
-			Messages::Add("The " + name + " is moving erratically because there are not enough crew to pilot it.");
-		else
-			Messages::Add("Your ship is moving erratically because you do not have enough crew to pilot it.");
+		pilotError = 20 + Random::Int(40);
+		pilotOkay = 15 + Random::Int(30);
+		if(isYours)
+			{
+			if(parent.lock())
+				Messages::Add("The " + name + " is moving erratically because there are not enough crew to pilot it.");
+			else
+				Messages::Add("Your ship is moving erratically because you do not have enough crew to pilot it.");
+			}
+	}
+	else if(Heat() > 1.5 && Random::Int(100) < (80 - (280 / (2 + Heat()))))
+	{
+		pilotError = 15 + Random::Int(30);
+		pilotOkay = 15 + Random::Int(30);
+		if(isYours)
+		{
+			if(parent.lock())
+				Messages::Add("The " + name + " is overheating.");
+			else
+				Messages::Add("Your ship is overheating.");
+		}
 	}
 	else if(heatIntegrity && Random::Int(100) < (100 / (1 + (3000 / heatIntegrity))))
 	{
-		pilotError = 30;
-		if(parent.lock() || !isYours)
-			Messages::Add("The " + name + " is moving erratically because it has suffered damage due to heat.");
-		else
-			Messages::Add("Your ship is moving erratically because it has suffered damage due to heat.");
+		pilotError = 10 + Random::Int(20);
+		pilotOkay = 15 + Random::Int(30);
+		if(isYours)
+		{
+			if(parent.lock())
+				Messages::Add("The " + name + " is moving erratically because it has suffered damage due to heat.");
+			else
+				Messages::Add("Your ship is moving erratically because it has suffered damage due to heat.");
+		}
 	}
 	else if(freezing && Random::Int(200) < freezing * 100)
 	{
-		pilotError = 10;
-		if(parent.lock() || !isYours)
-			Messages::Add("The " + name + " is moving erratically because of its low temperature.");
-		else
-			Messages::Add("Your ship is moving erratically because of its low temperature.");
+		pilotError = 5 + Random::Int(10);
+		pilotOkay = 15 + Random::Int(30);
+		if(isYours)
+		{
+			if(parent.lock())
+				Messages::Add("The " + name + " is moving erratically because of its low temperature.");
+			else
+				Messages::Add("Your ship is moving erratically because of its low temperature.");
+		}
 	}
-	else
-		pilotOkay = 30;
 	
 	// This ship is not landing or entering hyperspace. So, move it. If it is
 	// disabled, all it can do is slow down to a stop.
