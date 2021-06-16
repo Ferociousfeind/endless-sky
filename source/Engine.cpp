@@ -639,9 +639,9 @@ void Engine::Step(bool isActive)
 		info.SetBar("cold", 1 - min(1., 2 * heat));
 		if(heat < 0.05)
 		{
-			info.SetBar("overcold", 1 - min(1., 20 * heat));
+			info.SetBar("overcold", 1 - min(1., 20. * heat));
 			if((step / 20) % 2)
-				info.SetBar("overcold blink", 1 - min(1., 20 * heat));
+				info.SetBar("overcold blink", 1 - min(1., 20. * heat));
 		}
 		
 		info.SetBar("heat", min(1., 2 * (heat - 0.5)));
@@ -649,9 +649,9 @@ void Engine::Step(bool isActive)
 		// total heat level.
 		if(heat > 1.)
 		{
-			info.SetBar("overheat", min(1., 2 * (heat - 0.5)));
+			info.SetBar("overheat", min(1., 2. * (heat - 1.)));
 			if((step / 20) % 2)
-				info.SetBar("overheat blink", min(1., 2 * (heat - 0.5)));
+				info.SetBar("overheat blink", min(1., 2. * (heat - 1.)));
 		}
 		info.SetBar("shields", flagship->Shields());
 		info.SetBar("hull", flagship->Hull(), 20.);
