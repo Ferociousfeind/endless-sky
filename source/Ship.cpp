@@ -1721,8 +1721,8 @@ void Ship::Move(vector<Visual> &visuals, list<shared_ptr<Flotsam>> &flotsam)
 	}
 	else if(Heat() > 1.5 && Random::Int(100) < (80 - (280 / (2 + Heat()))))
 	{
-		pilotError = 15 + Random::Int(30);
-		pilotOkay = 15 + Random::Int(30);
+		pilotError = 35 + Random::Int(70);
+		pilotOkay = 5 + Random::Int(10);
 		if(isYours)
 		{
 			if(parent.lock())
