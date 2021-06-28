@@ -1934,6 +1934,23 @@ void Ship::DoGeneration()
 		if(!shieldDelay)
 			DoRepair(shields, shieldsRemaining, attributes.Get("shields"), energy, shieldsEnergy, fuel, shieldsFuel, heat, shieldsHeat);
 		
+		double energyCost = shields * attributes.Get("shield maintenance energy");
+		double heatCost = shields * -attributes.Get("shield maintenance heat");
+		double fuelCost = shields * attributes.Get("shield maintenance fuel");
+		double shieldMaintenance = 1.;
+		
+		if(energy < energyCost)
+			shieldMaintenance = min(shieldMaintenance, energy / energyCost);
+		if(heatCost > 0 && heat < heatCost)
+			shieldMaintenance = min(shieldMaintenance, heat / heatCost);
+		if(fuel < fuelCost)
+			shieldMaintenance = min(shieldMaintenance, fuel / fuelCost);
+		
+		shields *= shieldMaintenance;
+		energy -= shieldMaintenance * energyCost;
+		heat -= shieldMaintenance * heatCost;
+		fuel -= shieldMaintenance * fuelCost;
+		
 		if(!bays.empty())
 		{
 			// If this ship is carrying fighters, determine their repair priority.
