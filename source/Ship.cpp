@@ -1937,6 +1937,7 @@ void Ship::DoGeneration()
 		const double energyCost = attributes.Get("shield maintenance energy");
 		const double heatCost = -attributes.Get("shield maintenance heat");
 		const double fuelCost = attributes.Get("shield maintenance fuel");
+		const double shieldRetention = attributes.Get("shield retention");
 		double shieldMaintenance = 1.;
 
 		if(energy < shields * energyCost)
@@ -1948,7 +1949,7 @@ void Ship::DoGeneration()
 		shieldMaintenance = min(1., max(0., shieldMaintenance));
 
 		if(shieldMaintenance != 1.)
-			shields = (29. * shields + shields * shieldMaintenance) / 30.;
+			shields = shields * (shieldRetention + shieldMaintenance) / (1. + shieldRetention);
 		shieldMaintenance *= shields;
 		energy -= shieldMaintenance * energyCost;
 		heat -= shieldMaintenance * heatCost;
