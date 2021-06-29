@@ -1934,20 +1934,22 @@ void Ship::DoGeneration()
 		if(!shieldDelay)
 			DoRepair(shields, shieldsRemaining, attributes.Get("shields"), energy, shieldsEnergy, fuel, shieldsFuel, heat, shieldsHeat);
 		
-		double energyCost = shields * attributes.Get("shield maintenance energy");
-		double heatCost = shields * -attributes.Get("shield maintenance heat");
-		double fuelCost = shields * attributes.Get("shield maintenance fuel");
+		const double energyCost = attributes.Get("shield maintenance energy");
+		const double heatCost = -attributes.Get("shield maintenance heat");
+		const double fuelCost = attributes.Get("shield maintenance fuel");
 		double shieldMaintenance = 1.;
-		
-		if(energy < energyCost)
-			shieldMaintenance = min(shieldMaintenance, energy / energyCost);
-		if(heatCost > 0 && heat < heatCost)
-			shieldMaintenance = min(shieldMaintenance, heat / heatCost);
-		if(fuel < fuelCost)
-			shieldMaintenance = min(shieldMaintenance, fuel / fuelCost);
-		shieldMaintenance = max(0., shieldMaintenance);
-		
-		shields *= shieldMaintenance;
+
+		if(energy < shields * energyCost)
+			shieldMaintenance = min(shieldMaintenance, energy / (shields * energyCost));
+		if(heatCost > 0 && heat < shields * heatCost)
+			shieldMaintenance = min(shieldMaintenance, heat / (shields * heatCost));
+		if(fuel < shields * fuelCost)
+			shieldMaintenance = min(shieldMaintenance, fuel / (shields * fuelCost));
+		shieldMaintenance = shields * max(0., shieldMaintenance);
+
+		if(shieldMaintenance != 1.)
+			shields = (59. * shields + shields * shieldMaintenance) / 60.;
+		shieldMaintenance *= shields;
 		energy -= shieldMaintenance * energyCost;
 		heat -= shieldMaintenance * heatCost;
 		fuel -= shieldMaintenance * fuelCost;
