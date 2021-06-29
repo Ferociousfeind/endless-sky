@@ -308,6 +308,18 @@ tip "shield heat:"
 tip "shield heat multiplier:"
 	`Modifies the heat produced when recharging shields by the given factor.`
 
+tip "shield maintenance energy:"
+	`Maintaining shields requires this much energy per second, for every 100 units of shielding maintained.`
+
+tip "shield maintenance fuel:"
+	`Maintaining shields requires this much fuel per second, for every 100 units of shielding maintained.`
+
+tip "shield maintenance heat:"
+	`Maintaining shields produces this much heat per second, for every 100 units of shielding maintained.`
+
+tip "shield retention:"
+	`A proportion of your shielding which is retained in the event of lacking sufficient energy or fuel to maintain it.`
+
 tip "shield generation:"
 	`Shield points recharged per second. Recharging shields usually consumes energy, and may also produce heat.`
 
