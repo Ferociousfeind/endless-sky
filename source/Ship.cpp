@@ -1945,10 +1945,10 @@ void Ship::DoGeneration()
 			shieldMaintenance = min(shieldMaintenance, heat / (shields * heatCost));
 		if(fuel < shields * fuelCost)
 			shieldMaintenance = min(shieldMaintenance, fuel / (shields * fuelCost));
-		shieldMaintenance = shields * max(0., shieldMaintenance);
+		shieldMaintenance = min(1., max(0., shieldMaintenance));
 
 		if(shieldMaintenance != 1.)
-			shields = (59. * shields + shields * shieldMaintenance) / 60.;
+			shields = (29. * shields + shields * shieldMaintenance) / 30.;
 		shieldMaintenance *= shields;
 		energy -= shieldMaintenance * energyCost;
 		heat -= shieldMaintenance * heatCost;
