@@ -267,7 +267,7 @@ tip "required crew / bunks:"
 	`How many crew members are required to operate this ship, and how many total bunks are available. Extra bunks can be used for passengers or extra crew.`
 
 tip "required crew:"
-	`Changes the number of crew members this ship requires by this amount.`
+	`Changes the number of crew members this ship requires by this amount. Non-integer amounts represent a small, but non-zero, amount of maintenance or overseeing required, two sets of an outfit with 0.5 required crew can be installed, increasing crew requirement by only 1.`
 
 tip "reverse thrust:"
 	`Allows a ship to apply reverse thrust instead of needing to turn backward to slow down.`
