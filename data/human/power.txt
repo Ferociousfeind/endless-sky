@@ -110,6 +110,7 @@ outfit "nGVF-CC Fuel Cell"
 	"outfit space" -40
 	"energy generation" 2.6
 	"heat generation" 3.8
+	"required crew" 1
 	description "This is a medium-sized fuel cell, designed to be sufficient for larger civilian ships and small warships while still being more affordable than the more sophisticated generator options."
 
 outfit "nGVF-DD Fuel Cell"
@@ -120,6 +121,7 @@ outfit "nGVF-DD Fuel Cell"
 	"outfit space" -60
 	"energy generation" 4.1
 	"heat generation" 5.7
+	"required crew" 2
 	description "This is a relatively large fuel cell. Other generators are available that produce more energy and fit into a smaller space, but they are much more expensive. As a result, large civilian ships that will not be frequently in combat often come equipped with these fuel cells."
 
 outfit "nGVF-EE Fuel Cell"
@@ -130,6 +132,7 @@ outfit "nGVF-EE Fuel Cell"
 	"outfit space" -80
 	"energy generation" 5.9
 	"heat generation" 7.8
+	"required crew" 2
 	description "This is the largest fuel cell available, larger than some nuclear reactors but much, much more affordable. Many captains on a tight budget are willing to put up with one of these until they can raise the money for something more efficient."
 
 
@@ -141,6 +144,7 @@ outfit "RT-I Radiothermal"
 	"outfit space" -45
 	"energy generation" 4.4
 	"heat generation" 18
+	"required crew" 1
 	description "Radiothermal generators harvest heat from radioactive isotopes and convert it into electricity. They are more powerful than fuel cells, but also produce a relatively high amount of heat."
 
 outfit "S3 Thermionic"
@@ -151,6 +155,7 @@ outfit "S3 Thermionic"
 	"outfit space" -55
 	"energy generation" 5.0
 	"heat generation" 12
+	"required crew" 2
 	description "Thermionic radioisotopic generators were designed as a cooler-running alternative to radiothermal generators."
 
 outfit "NT-200 Nucleovoltaic"
@@ -161,6 +166,7 @@ outfit "NT-200 Nucleovoltaic"
 	"outfit space" -65
 	"energy generation" 7.2
 	"heat generation" 15
+	"required crew" 3
 	description "Nucleovoltaic generators are a relatively recent generator technology that harvests energy from the decay of a radioisotope source and converts it directly into electricity. They are the most powerful generator that relies on nuclear decay instead of an active nuclear chain reaction."
 
 
@@ -182,6 +188,7 @@ outfit "Fission Reactor"
 	"outfit space" -65
 	"energy generation" 9.4
 	"heat generation" 25
+	"required crew" 1
 	description "Fission reactors have been a mainstay of large military vessels since even before the dawn of the space era. Today's models are very safe and efficient, but some pilots still find them disconcerting."
 
 outfit "Breeder Reactor"
@@ -192,6 +199,7 @@ outfit "Breeder Reactor"
 	"outfit space" -80
 	"energy generation" 12.8
 	"heat generation" 35
+	"required crew" 2
 	description "A breeder reactor is a more efficient fission reactor that captures some of the neutron radiation produced by the reactor and uses it to enrich more fuel. They are also, of course, bigger and more expensive as a result."
 
 outfit "Fusion Reactor"
@@ -202,6 +210,7 @@ outfit "Fusion Reactor"
 	"outfit space" -100
 	"energy generation" 18.2
 	"heat generation" 40
+	"required crew" 5
 	description "The invention of practical fusion power near the end of the twenty-first century spurred a new era of prosperity and plenty. Centuries later, the generators have been reduced in size, but are still generally only used in capital warships."
 
 outfit "Armageddon Core"
@@ -212,6 +221,7 @@ outfit "Armageddon Core"
 	"outfit space" -130
 	"energy generation" 24.2
 	"heat generation" 70
+	"required crew" 12
 	description "The Armageddon Core was designed to meet the extreme power needs of the largest warships of the Republic Navy. One of these generators costs more than an entire fleet of smaller ships."
 
 outfit "Stack Core"
@@ -222,4 +232,5 @@ outfit "Stack Core"
 	"outfit space" -140
 	"energy generation" 22.9
 	"heat generation" 55
+	"required crew" 10
 	description "The Stack Core was created by the Free Worlds primarily as a power source for their Dreadnoughts. It is a fission reactor, and therefore less efficient than the Navy's fusion technology, but it is also significantly cheaper to produce."
