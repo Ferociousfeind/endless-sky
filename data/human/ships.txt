@@ -16,7 +16,7 @@ ship "Aerie"
 		"cost" 3500000
 		"shields" 5700
 		"hull" 1900
-		"required crew" 10
+		"required crew" 2
 		"bunks" 28
 		"mass" 130
 		"drag" 4.1
@@ -79,7 +79,7 @@ ship "Argosy"
 		"cost" 1960000
 		"shields" 4200
 		"hull" 2600
-		"required crew" 4
+		"required crew" 1
 		"bunks" 14
 		"mass" 330
 		"drag" 5.9
@@ -194,7 +194,7 @@ ship "Auxiliary"
 		"cost" 13720000
 		"shields" 17100
 		"hull" 5900
-		"required crew" 87
+		"required crew" 62
 		"bunks" 250
 		"mass" 820
 		"drag" 13.3
@@ -432,7 +432,7 @@ ship "Bastion"
 		"cost" 3860000
 		"shields" 7500
 		"hull" 4700
-		"required crew" 17
+		"required crew" 5
 		"bunks" 40
 		"mass" 580
 		"drag" 10.3
@@ -496,7 +496,7 @@ ship "Behemoth"
 		"cost" 10800000
 		"shields" 7600
 		"hull" 6300
-		"required crew" 12
+		"required crew" 3
 		"bunks" 30
 		"mass" 540
 		"drag" 11.7
@@ -558,7 +558,7 @@ ship "Berserker"
 		"shields" 2200
 		"hull" 500
 		"required crew" 1
-		"bunks" 2
+		"bunks" 3
 		"mass" 110
 		"drag" 2.2
 		"heat dissipation" .85
@@ -608,7 +608,7 @@ ship "Blackbird"
 		"cost" 2230000
 		"shields" 4400
 		"hull" 900
-		"required crew" 3
+		"required crew" 1
 		"bunks" 28
 		"mass" 220
 		"drag" 5.0
@@ -746,7 +746,7 @@ ship "Bulk Freighter"
 		"cost" 9400000
 		"shields" 4000
 		"hull" 7600
-		"required crew" 6
+		"required crew" 2
 		"bunks" 18
 		"mass" 870
 		"drag" 15.8
@@ -808,7 +808,7 @@ ship "Carrier"
 		"cost" 15200000
 		"shields" 21400
 		"hull" 8300
-		"required crew" 111
+		"required crew" 86
 		"bunks" 184
 		"mass" 910
 		"drag" 17.7
@@ -891,7 +891,7 @@ ship "Class C Freighter"
 		"cost" 11400000
 		"shields" 13500
 		"hull" 7600
-		"required crew" 18
+		"required crew" 6
 		"bunks" 43
 		"mass" 810
 		"drag" 16.4
@@ -957,7 +957,7 @@ ship "Clipper"
 		"cost" 900000
 		"shields" 2700
 		"hull" 800
-		"required crew" 3
+		"required crew" 1
 		"bunks" 9
 		"mass" 150
 		"drag" 3.7
@@ -1047,7 +1047,7 @@ ship "Container Transport"
 		"cost" 9400000
 		"shields" 4000
 		"hull" 7600
-		"required crew" 6
+		"required crew" 2
 		"bunks" 18
 		"mass" 870
 		"drag" 15.8
@@ -1107,7 +1107,7 @@ ship "Corvette"
 		"cost" 4400000
 		"shields" 6800
 		"hull" 800
-		"required crew" 8
+		"required crew" 3
 		"bunks" 32
 		"mass" 150
 		"drag" 3.5
@@ -1171,7 +1171,7 @@ ship "Cruiser"
 		"cost" 11200000
 		"shields" 19600
 		"hull" 6400
-		"required crew" 81
+		"required crew" 58
 		"bunks" 136
 		"mass" 680
 		"drag" 10.1
@@ -1291,7 +1291,7 @@ ship "Dreadnought"
 		"cost" 11900000
 		"shields" 18100
 		"hull" 7300
-		"required crew" 84
+		"required crew" 63
 		"bunks" 147
 		"mass" 630
 		"drag" 10.1
@@ -1402,7 +1402,7 @@ ship "Falcon"
 		"cost" 10900000
 		"shields" 12800
 		"hull" 3700
-		"required crew" 52
+		"required crew" 39
 		"bunks" 75
 		"mass" 510
 		"drag" 6.7
@@ -1512,7 +1512,7 @@ ship "Firebird"
 		"cost" 3700000
 		"shields" 5800
 		"hull" 3400
-		"required crew" 7
+		"required crew" 4
 		"bunks" 22
 		"mass" 290
 		"drag" 4.5
@@ -1670,7 +1670,7 @@ ship "Frigate"
 		"cost" 5200000
 		"shields" 8000
 		"hull" 2500
-		"required crew" 21
+		"required crew" 10
 		"bunks" 44
 		"mass" 310
 		"drag" 5.2
@@ -1786,7 +1786,7 @@ ship "Gunboat"
 		"cost" 3200000
 		"shields" 5800
 		"hull" 1400
-		"required crew" 7
+		"required crew" 2
 		"bunks" 12
 		"mass" 150
 		"drag" 3.1
@@ -1841,7 +1841,7 @@ ship "Hauler"
 		"cost" 1430000
 		"shields" 2500
 		"hull" 3700
-		"required crew" 3
+		"required crew" 1
 		"bunks" 12
 		"mass" 250
 		"drag" 10.5
@@ -1899,7 +1899,7 @@ ship "Hauler II"
 		"cost" 2340000
 		"shields" 2900
 		"hull" 5200
-		"required crew" 3
+		"required crew" 1
 		"bunks" 12
 		"mass" 360
 		"drag" 11.5
@@ -1958,7 +1958,7 @@ ship "Hauler III"
 		"cost" 3260000
 		"shields" 3300
 		"hull" 6700
-		"required crew" 3
+		"required crew" 1
 		"bunks" 12
 		"mass" 470
 		"drag" 12.5
@@ -2017,7 +2017,7 @@ ship "Hawk"
 		"cost" 670000
 		"shields" 2500
 		"hull" 500
-		"required crew" 2
+		"required crew" 1
 		"bunks" 4
 		"mass" 150
 		"drag" 2.1
@@ -2065,7 +2065,7 @@ ship "Headhunter"
 		"cost" 1850000
 		"shields" 3800
 		"hull" 700
-		"required crew" 2
+		"required crew" 1
 		"bunks" 4
 		"mass" 120
 		"drag" 2.6
@@ -2205,7 +2205,7 @@ ship "Leviathan"
 		"cost" 9800000
 		"shields" 14400
 		"hull" 5000
-		"required crew" 43
+		"required crew" 24
 		"bunks" 64
 		"mass" 480
 		"drag" 7.6
@@ -2265,7 +2265,7 @@ ship "Manta"
 		"cost" 3400000
 		"shields" 5900
 		"hull" 1500
-		"required crew" 6
+		"required crew" 2
 		"bunks" 10
 		"mass" 170
 		"drag" 4.7
@@ -2322,7 +2322,7 @@ ship "Modified Argosy"
 		"cost" 1960000
 		"shields" 4800
 		"hull" 1900
-		"required crew" 5
+		"required crew" 1
 		"bunks" 12
 		"mass" 250
 		"drag" 6.2
@@ -2384,7 +2384,7 @@ ship "Mule"
 		"cost" 4080000
 		"shields" 5400
 		"hull" 4400
-		"required crew" 14
+		"required crew" 5
 		"bunks" 43
 		"mass" 320
 		"drag" 5.7
@@ -2446,7 +2446,7 @@ ship "Nest"
 		"cost" 2500000
 		"shields" 2500
 		"hull" 3700
-		"required crew" 5
+		"required crew" 1
 		"bunks" 14
 		"mass" 250
 		"drag" 10.5
@@ -2507,7 +2507,7 @@ ship "Osprey"
 		"cost" 4200000
 		"shields" 7200
 		"hull" 1600
-		"required crew" 9
+		"required crew" 3
 		"bunks" 24
 		"mass" 270
 		"drag" 5.9
@@ -2568,7 +2568,7 @@ ship "Protector"
 		"cost" 5500000
 		"shields" 9500
 		"hull" 6500
-		"required crew" 30
+		"required crew" 8
 		"bunks" 69
 		"mass" 500
 		"drag" 10.3
@@ -2629,7 +2629,7 @@ ship "Quicksilver"
 		"cost" 1090000
 		"shields" 3000
 		"hull" 800
-		"required crew" 3
+		"required crew" 1
 		"bunks" 6
 		"mass" 120
 		"drag" 2.7
@@ -2678,7 +2678,7 @@ ship "Rainmaker"
 		"cost" 1580000
 		"shields" 3500
 		"hull" 1200
-		"required crew" 7
+		"required crew" 1
 		"bunks" 14
 		"mass" 180
 		"drag" 3.8
@@ -2734,7 +2734,7 @@ ship "Raven"
 		"cost" 2200000
 		"shields" 4700
 		"hull" 1400
-		"required crew" 6
+		"required crew" 1
 		"bunks" 13
 		"mass" 130
 		"drag" 3.7
@@ -2789,7 +2789,7 @@ ship "Roost"
 		"cost" 3000000
 		"shields" 2900
 		"hull" 5200
-		"required crew" 7
+		"required crew" 1
 		"bunks" 16
 		"mass" 360
 		"drag" 11.5
@@ -2853,7 +2853,7 @@ ship "Scout"
 		"cost" 850000
 		"shields" 1200
 		"hull" 400
-		"required crew" 2
+		"required crew" 1
 		"bunks" 12
 		"mass" 110
 		"drag" 3.4
@@ -2953,7 +2953,7 @@ ship "Skein"
 		"cost" 3500000
 		"shields" 3300
 		"hull" 6700
-		"required crew" 7
+		"required crew" 1
 		"bunks" 18
 		"mass" 470
 		"drag" 12.5
@@ -3065,7 +3065,7 @@ ship "Splinter"
 		"cost" 3100000
 		"shields" 5200
 		"hull" 1700
-		"required crew" 7
+		"required crew" 2
 		"bunks" 21
 		"mass" 250
 		"drag" 4.0
@@ -3168,7 +3168,7 @@ ship "Star Queen"
 		"cost" 5500000
 		"shields" 4100
 		"hull" 2200
-		"required crew" 41
+		"required crew" 30
 		"bunks" 112
 		"mass" 230
 		"drag" 4.5
@@ -3260,7 +3260,7 @@ ship "Vanguard"
 		"cost" 7200000
 		"shields" 9800
 		"hull" 6000
-		"required crew" 23
+		"required crew" 4
 		"bunks" 45
 		"mass" 500
 		"drag" 8
