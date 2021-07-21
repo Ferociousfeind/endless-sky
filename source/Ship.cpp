@@ -2996,7 +2996,7 @@ int Ship::RequiredCrew() const
 		return 0;
 	
 	// Drones do not need crew, but all other ships need at least one.
-	return max<int>(1, attributes.Get("required crew"));
+	return max<int>(1, ceil(attributes.Get("required crew")));
 }
 
 
