@@ -15,6 +15,7 @@ outfit "Afterburner"
 	"mass" 15
 	"outfit space" -15
 	"engine capacity" -15
+	"required crew" 2
 	"afterburner thrust" 25.0
 	"afterburner fuel" .5
 	"afterburner heat" 10.0
@@ -40,6 +41,7 @@ outfit "Ionic Afterburner"
 	"mass" 24
 	"outfit space" -24
 	"engine capacity" -24
+	"required crew" 2
 	"afterburner thrust" 29.0
 	"afterburner fuel" .1
 	"afterburner energy" 5.1
@@ -123,6 +125,7 @@ outfit "X3700 Ion Thruster"
 	"mass" 46
 	"outfit space" -46
 	"engine capacity" -46
+	"required crew" 2
 	"thrust" 22.1
 	"thrusting energy" 1.9
 	"thrusting heat" 3.2
@@ -139,6 +142,7 @@ outfit "X4700 Ion Thruster"
 	"mass" 79
 	"outfit space" -79
 	"engine capacity" -79
+	"required crew" 4
 	"thrust" 42.5
 	"thrusting energy" 3.5
 	"thrusting heat" 6.2
@@ -155,6 +159,7 @@ outfit "X5700 Ion Thruster"
 	"mass" 134
 	"outfit space" -134
 	"engine capacity" -134
+	"required crew" 6
 	"thrust" 81.5
 	"thrusting energy" 6.3
 	"thrusting heat" 11.7
@@ -204,6 +209,7 @@ outfit "X3200 Ion Steering"
 	"mass" 35
 	"outfit space" -35
 	"engine capacity" -35
+	"required crew" 1
 	"turn" 590
 	"turning energy" 1.1
 	"turning heat" 2.0
@@ -220,6 +226,7 @@ outfit "X4200 Ion Steering"
 	"mass" 59
 	"outfit space" -59
 	"engine capacity" -59
+	"required crew" 3
 	"turn" 1132
 	"turning energy" 1.9
 	"turning heat" 3.9
@@ -236,6 +243,7 @@ outfit "X5200 Ion Steering"
 	"mass" 100
 	"outfit space" -100
 	"engine capacity" -100
+	"required crew" 5
 	"turn" 2174
 	"turning energy" 3.5
 	"turning heat" 7.3
@@ -270,6 +278,7 @@ outfit "Greyhound Plasma Thruster"
 	"mass" 34
 	"outfit space" -34
 	"engine capacity" -34
+	"required crew" 1
 	"thrust" 18.4
 	"thrusting energy" 1.8
 	"thrusting heat" 3.4
@@ -286,6 +295,7 @@ outfit "Impala Plasma Thruster"
 	"mass" 58
 	"outfit space" -58
 	"engine capacity" -58
+	"required crew" 3
 	"thrust" 35.4
 	"thrusting energy" 3.2
 	"thrusting heat" 6.5
@@ -302,6 +312,7 @@ outfit "Orca Plasma Thruster"
 	"mass" 98
 	"outfit space" -98
 	"engine capacity" -98
+	"required crew" 6
 	"thrust" 67.9
 	"thrusting energy" 5.8
 	"thrusting heat" 12.3
@@ -318,6 +329,7 @@ outfit "Tyrant Plasma Thruster"
 	"mass" 167
 	"outfit space" -167
 	"engine capacity" -167
+	"required crew" 10
 	"thrust" 130.5
 	"thrusting energy" 10.5
 	"thrusting heat" 23.5
@@ -351,6 +363,7 @@ outfit "Greyhound Plasma Steering"
 	"mass" 26
 	"outfit space" -26
 	"engine capacity" -26
+	"required crew" 1
 	"turn" 492
 	"turning energy" 0.9
 	"turning heat" 2.1
@@ -367,6 +380,7 @@ outfit "Impala Plasma Steering"
 	"mass" 43
 	"outfit space" -43
 	"engine capacity" -43
+	"required crew" 2
 	"turn" 944
 	"turning energy" 1.6
 	"turning heat" 4.1
@@ -383,6 +397,7 @@ outfit "Orca Plasma Steering"
 	"mass" 74
 	"outfit space" -74
 	"engine capacity" -74
+	"required crew" 4
 	"turn" 1812
 	"turning energy" 2.9
 	"turning heat" 7.7
@@ -399,6 +414,7 @@ outfit "Tyrant Plasma Steering"
 	"mass" 125
 	"outfit space" -125
 	"engine capacity" -125
+	"required crew" 9
 	"turn" 3479
 	"turning energy" 5.2
 	"turning heat" 14.7
@@ -417,6 +433,7 @@ outfit "A120 Atomic Thruster"
 	"mass" 22
 	"outfit space" -22
 	"engine capacity" -22
+	"required crew" 1
 	"thrust" 15.4
 	"thrusting energy" 1.8
 	"thrusting heat" 3.5
@@ -432,6 +449,7 @@ outfit "A250 Atomic Thruster"
 	"mass" 34
 	"outfit space" -34
 	"engine capacity" -34
+	"required crew" 2
 	"thrust" 27.3
 	"thrusting energy" 3.1
 	"thrusting heat" 6.1
@@ -447,6 +465,7 @@ outfit "A370 Atomic Thruster"
 	"mass" 53
 	"outfit space" -53
 	"engine capacity" -53
+	"required crew" 4
 	"thrust" 47.6
 	"thrusting energy" 5.1
 	"thrusting heat" 10.3
@@ -462,6 +481,7 @@ outfit "A520 Atomic Thruster"
 	"mass" 82
 	"outfit space" -82
 	"engine capacity" -82
+	"required crew" 7
 	"thrust" 81.9
 	"thrusting energy" 8.3
 	"thrusting heat" 17.4
@@ -477,6 +497,7 @@ outfit "A860 Atomic Thruster"
 	"mass" 127
 	"outfit space" -127
 	"engine capacity" -127
+	"required crew" 12
 	"thrust" 139.7
 	"thrusting energy" 13.3
 	"thrusting heat" 29.1
@@ -493,6 +514,7 @@ outfit "A125 Atomic Steering"
 	"mass" 16
 	"outfit space" -16
 	"engine capacity" -16
+	"required crew" 1
 	"turn" 392
 	"turning energy" 0.9
 	"turning heat" 2.2
@@ -508,6 +530,7 @@ outfit "A255 Atomic Steering"
 	"mass" 25
 	"outfit space" -25
 	"engine capacity" -25
+	"required crew" 2
 	"turn" 687
 	"turning energy" 1.5
 	"turning heat" 3.7
@@ -523,6 +546,7 @@ outfit "A375 Atomic Steering"
 	"mass" 38
 	"outfit space" -38
 	"engine capacity" -38
+	"required crew" 3
 	"turn" 1192
 	"turning energy" 2.5
 	"turning heat" 6.3
@@ -538,6 +562,7 @@ outfit "A525 Atomic Steering"
 	"mass" 60
 	"outfit space" -60
 	"engine capacity" -60
+	"required crew" 6
 	"turn" 2050
 	"turning energy" 4.1
 	"turning heat" 10.5
@@ -553,6 +578,7 @@ outfit "A865 Atomic Steering"
 	"mass" 92
 	"outfit space" -92
 	"engine capacity" -92
+	"required crew" 10
 	"turn" 3509
 	"turning energy" 6.6
 	"turning heat" 17.5
@@ -569,6 +595,7 @@ outfit "AR120 Reverse Thruster"
 	"mass" 22
 	"outfit space" -22
 	"weapon capacity" -22
+	"required crew" 1
 	"reverse thrust" 15.4
 	"reverse thrusting energy" 1.8
 	"reverse thrusting heat" 3.5
