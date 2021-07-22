@@ -1070,7 +1070,7 @@ vector<string> Ship::FlightCheck() const
 	double jumpDrive = attributes.Get("jump drive");
 	
 	// Report the first error condition that will prevent takeoff:
-	if(IdleHeat() >= MaximumHeat())
+	if(IdleHeat() >= 1.5 * MaximumHeat())
 		checks.emplace_back("overheating!");
 	else if(energy <= 0.)
 		checks.emplace_back("no energy!");
@@ -1084,6 +1084,10 @@ vector<string> Ship::FlightCheck() const
 	// If no errors were found, check all warning conditions:
 	if(checks.empty())
 	{
+		if(IdleHeat() >= MaximumHeat())
+			checks.emplace_back("high heat?");
+		if(IdleHeat() <= 0.05 * MaximumHeat())
+			checks.emplace_back("low heat?");
 		if(!thrust && !reverseThrust)
 			checks.emplace_back("afterburner only?");
 		if(!thrust && !afterburner)
@@ -1138,11 +1142,18 @@ void Ship::Place(Point position, Point velocity, Angle angle)
 	{
 		landingPlanet = nullptr;
 		zoom = parent.lock() ? (-.2 + -.8 * Random::Real()) : 0.;
+		// If landed, ships should take off with nominal heat,
+		// and heat/cool from there, instead of starting at equilibrium.
+		heat = 0.5 * MaximumHeat();
 	}
 	else
+	{
 		zoom = 1.;
+		// If not landed, do start ships at equilibrium.
+		heat = IdleHeat();
+	}
 	// Make sure various special status values are reset.
-	heat = IdleHeat();
+	heatIntegrity = 0.;
 	ionization = 0.;
 	disruption = 0.;
 	slowness = 0.;
@@ -1691,16 +1702,52 @@ void Ship::Move(vector<Visual> &visuals, list<shared_ptr<Flotsam>> &flotsam)
 	}
 	else if(requiredCrew && static_cast<int>(Random::Int(requiredCrew)) >= Crew())
 	{
-		pilotError = 30;
-		if(parent.lock() || !isYours)
-			Messages::Add("The " + name + " is moving erratically because there are not enough crew to pilot it."
-				, Messages::Importance::Low);
-		else
-			Messages::Add("Your ship is moving erratically because you do not have enough crew to pilot it."
-				, Messages::Importance::Low);
+		pilotError = 20 + Random::Int(40);
+		pilotOkay = 15 + Random::Int(30);
+		if(isYours)
+			{
+			if(parent.lock())
+				Messages::Add("The " + name + " is moving erratically because there are not enough crew to pilot it.", Messages::Importance::Low);
+			else
+				Messages::Add("Your ship is moving erratically because you do not have enough crew to pilot it.", Messages::Importance::Low);
+			}
 	}
-	else
-		pilotOkay = 30;
+	else if(Heat() > 1.5 && Random::Int(100) < (80 - (280 / (2 + Heat()))))
+	{
+		pilotError = 35 + Random::Int(70);
+		pilotOkay = 5 + Random::Int(10);
+		if(isYours)
+		{
+			if(parent.lock())
+				Messages::Add("The " + name + " is overheating.", Messages::Importance::Low);
+			else
+				Messages::Add("Your ship is overheating.", Messages::Importance::Low);
+		}
+	}
+	else if(heatIntegrity && Random::Int(100) < (100 / (1 + (3000 / heatIntegrity))))
+	{
+		pilotError = 10 + Random::Int(20);
+		pilotOkay = 15 + Random::Int(30);
+		if(isYours)
+		{
+			if(parent.lock())
+				Messages::Add("The " + name + " is moving erratically because it has suffered damage due to heat.", Messages::Importance::Low);
+			else
+				Messages::Add("Your ship is moving erratically because it has suffered damage due to heat.", Messages::Importance::Low);
+		}
+	}
+	else if(freezing && Random::Int(200) < freezing * 100)
+	{
+		pilotError = 5 + Random::Int(10);
+		pilotOkay = 15 + Random::Int(30);
+		if(isYours)
+		{
+			if(parent.lock())
+				Messages::Add("The " + name + " is moving erratically because of its low temperature.");
+			else
+				Messages::Add("Your ship is moving erratically because of its low temperature.");
+		}
+	}
 	
 	// This ship is not landing or entering hyperspace. So, move it. If it is
 	// disabled, all it can do is slow down to a stop.
@@ -2010,17 +2057,24 @@ void Ship::DoGeneration()
 	fuel = min(fuel, attributes.Get("fuel capacity"));
 	
 	heat -= heat * HeatDissipation();
-	if(heat > MaximumHeat())
-		isOverheated = true;
-	else if(heat < .9 * MaximumHeat())
-		isOverheated = false;
+
+	if(Heat() > 1.)
+	{
+		heatIntegrity += Heat() - 1;
+		heatIntegrity = min(12000., heatIntegrity);
+	}
+	
+	if(Heat() < 0.05)
+		freezing = 20. * (0.05 - Heat());
+	else
+		freezing = 0.;
 	
 	double maxShields = attributes.Get("shields");
 	shields = min(shields, maxShields);
 	double maxHull = attributes.Get("hull");
 	hull = min(hull, maxHull);
 	
-	isDisabled = isOverheated || hull < MinimumHull() || (!crew && RequiredCrew());
+	isDisabled = hull < MinimumHull() || (!crew && RequiredCrew());
 	
 	// Whenever not actively scanning, the amount of scan information the ship
 	// has "decays" over time. For a scanner with a speed of 1, one second of
@@ -2054,7 +2108,7 @@ void Ship::DoGeneration()
 		energy += attributes.Get("energy generation") - attributes.Get("energy consumption");
 		fuel += attributes.Get("fuel generation");
 		heat += attributes.Get("heat generation");
-		heat -= coolingEfficiency * attributes.Get("cooling");
+		heat -= coolingEfficiency * attributes.Get("cooling") * Heat();
 		
 		// Convert fuel into energy and heat only when the required amount of fuel is available.
 		if(attributes.Get("fuel consumption") <= fuel)
@@ -2067,19 +2121,33 @@ void Ship::DoGeneration()
 		// Apply active cooling. The fraction of full cooling to apply equals
 		// your ship's current fraction of its maximum temperature.
 		double activeCooling = coolingEfficiency * attributes.Get("active cooling");
-		if(activeCooling > 0. && heat > 0. && energy >= 0.)
+		if(activeCooling > 0. && Heat() > 0.5 && energy >= 0.)
 		{
 			// Although it's a misuse of this feature, handle the case where
 			// "active cooling" does not require any energy.
 			double coolingEnergy = attributes.Get("cooling energy");
 			if(coolingEnergy)
 			{
-				double spentEnergy = min(energy, coolingEnergy * min(1., Heat()));
-				heat -= activeCooling * spentEnergy / coolingEnergy;
+				double spentEnergy = min(energy, coolingEnergy * min(1., max(0., 2. * Heat() - 1.)));
+				heat -= activeCooling * Heat() * spentEnergy / coolingEnergy;
 				energy -= spentEnergy;
 			}
 			else
-				heat -= activeCooling;
+				heat -= activeCooling * Heat() * Heat();
+		}
+		double activeHeating = coolingEfficiency * attributes.Get("active heating");
+		double heatingStrength = max(0., 1 - (2 * Heat()));
+		if(activeHeating > 0. && Heat() < 0.5 && energy >= 0.)
+		{
+			double heatingEnergy = attributes.Get("heating energy");
+			if(heatingEnergy)
+			{
+				double spentEnergy = min(energy, heatingEnergy * heatingStrength);
+				heat += activeHeating * spentEnergy / heatingEnergy;
+				energy -= spentEnergy;
+			}
+			else
+				heat += activeHeating * heatingStrength;
 		}
 	}
 	
@@ -2402,13 +2470,6 @@ bool Ship::IsTargetable() const
 
 
 
-bool Ship::IsOverheated() const
-{
-	return isOverheated;
-}
-
-
-
 bool Ship::IsDisabled() const
 {
 	if(!isDisabled)
@@ -2647,6 +2708,7 @@ void Ship::Recharge(bool atSpaceport)
 	{
 		crew = min<int>(max(crew, RequiredCrew()), attributes.Get("bunks"));
 		fuel = attributes.Get("fuel capacity");
+		heatIntegrity = 0.;
 	}
 	pilotError = 0;
 	pilotOkay = 0;
@@ -2658,7 +2720,7 @@ void Ship::Recharge(bool atSpaceport)
 	if(atSpaceport || attributes.Get("energy generation"))
 		energy = attributes.Get("energy capacity");
 	
-	heat = IdleHeat();
+	heat = 0.5 * MaximumHeat();
 	ionization = 0.;
 	disruption = 0.;
 	slowness = 0.;
@@ -2942,15 +3004,28 @@ double Ship::IdleHeat() const
 	double coolingEfficiency = CoolingEfficiency();
 	double cooling = coolingEfficiency * attributes.Get("cooling");
 	double activeCooling = coolingEfficiency * attributes.Get("active cooling");
-	
+	double activeHeating = coolingEfficiency * attributes.Get("active heating");
+
 	// Idle heat is the heat level where:
 	// heat = heat * diss + heatGen - cool - activeCool * heat / (100 * mass)
 	// heat = heat * (diss - activeCool / (100 * mass)) + (heatGen - cool)
 	// heat * (1 - diss + activeCool / (100 * mass)) = (heatGen - cool)
-	double production = max(0., attributes.Get("heat generation") - cooling);
-	double dissipation = HeatDissipation() + activeCooling / MaximumHeat();
-	if(!dissipation) return production ? numeric_limits<double>::max() : 0;
-	return production / dissipation;
+	double production = attributes.Get("heat generation")
+		+ attributes.Get("fuel heat")
+		+ attributes.Get("solar heat");
+	double dissipation = HeatDissipation() + cooling / MaximumHeat();
+	// If we're passively above 50% heat, only active cooling will be active.
+	// If we're passively below 50% heat, only active heating will be active.
+	// If we're on one side passively, and on the other side with active elements,
+	// the idle temperature will be 50%.
+	if(!dissipation || production / dissipation > MaximumHeat() * 0.5)
+	{
+		dissipation = HeatDissipation() + (cooling + activeCooling) / MaximumHeat();
+		return max(MaximumHeat() * 0.5, production / dissipation);
+	} else {
+		production = attributes.Get("heat generation") + activeHeating;
+		return min(MaximumHeat() * 0.5, production / dissipation);
+	}
 }
 
 
@@ -2966,7 +3041,7 @@ double Ship::HeatDissipation() const
 // Get the maximum heat level, in heat units (not temperature).
 double Ship::MaximumHeat() const
 {
-	return MAXIMUM_TEMPERATURE * (cargo.Used() + attributes.Mass());
+	return MAXIMUM_TEMPERATURE * (attributes.Mass() + attributes.Get("heatsink"));
 }
 
 
@@ -3061,6 +3136,8 @@ double Ship::MaxReverseVelocity() const
 // it hit this ship, and add any visuals created as a result
 // of being hit.
 int Ship::TakeDamage(vector<Visual> &visuals, const Weapon &weapon, double damageScaling, double distanceTraveled, const Point &damagePosition, const Government *sourceGovernment, bool isBlast)
+{// A helper method for taking damage from either a projectile or a hazard.
+int Ship::TakeDamage(const Weapon &weapon, double damageScaling, double distanceTraveled, const Point &damagePosition, bool isBlast)
 {
 	if(isBlast && weapon.IsDamageScaled())
 	{
@@ -3090,6 +3167,8 @@ int Ship::TakeDamage(vector<Visual> &visuals, const Weapon &weapon, double damag
 		* damageScaling / (1. + attributes.Get("fuel protection"));
 	double heatDamage = (weapon.HeatDamage() + weapon.RelativeHeatDamage() * MaximumHeat())
 		* damageScaling / (1. + attributes.Get("heat protection"));
+	double coolingDamage = weapon.CoolingDamage()
+		* damageScaling / (1. + attributes.Get("heat protection"));
 	double ionDamage = weapon.IonDamage() * damageScaling / (1. + attributes.Get("ion protection"));
 	double disruptionDamage = weapon.DisruptionDamage() * damageScaling / (1. + attributes.Get("disruption protection"));
 	double slowingDamage = weapon.SlowingDamage() * damageScaling / (1. + attributes.Get("slowing protection"));
@@ -3109,7 +3188,7 @@ int Ship::TakeDamage(vector<Visual> &visuals, const Weapon &weapon, double damag
 		int disabledDelay = static_cast<int>(attributes.Get("depleted shield delay"));
 		shieldDelay = max(shieldDelay, (shields <= 0. && disabledDelay) ? disabledDelay : static_cast<int>(attributes.Get("shield delay")));
 	}
-	hull -= hullDamage * (1. - shieldFraction);
+	hull -= hullDamage * (1. - shieldFraction) * (1. + heatIntegrity / 600) * (1. + freezing);
 	if(hullDamage && !isDisabled)
 		hullDelay = max(hullDelay, static_cast<int>(attributes.Get("repair delay")));
 	// For the following damage types, the total effect depends on how much is
@@ -3120,6 +3199,7 @@ int Ship::TakeDamage(vector<Visual> &visuals, const Weapon &weapon, double damag
 	energy -= energyDamage * leakage;
 	fuel -= fuelDamage * leakage;
 	heat += heatDamage * leakage;
+	heat -= (heat - (heat * attributes.Mass() / (attributes.Mass() + coolingDamage))) * leakage;
 	ionization += ionDamage * leakage;
 	disruption += disruptionDamage * leakage;
 	slowness += slowingDamage * leakage;
@@ -3146,14 +3226,6 @@ int Ship::TakeDamage(vector<Visual> &visuals, const Weapon &weapon, double damag
 	if(!wasDestroyed && IsDestroyed())
 		type |= ShipEvent::DESTROY;
 	
-	// Inflicted heat damage may also disable a ship, but does not trigger a "DISABLE" event.
-	if(heat > MaximumHeat())
-	{
-		isOverheated = true;
-		isDisabled = true;
-	}
-	else if(heat < .9 * MaximumHeat())
-		isOverheated = false;
 	
 	// If this ship was hit directly and did not consider itself an enemy of the
 	// ship that hit it, it is now "provoked" against that government.
@@ -3362,9 +3434,6 @@ void Ship::Jettison(const string &commodity, int tons, bool wasAppeasing)
 {
 	cargo.Remove(commodity, tons);
 	
-	// Jettisoned cargo must carry some of the ship's heat with it. Otherwise
-	// jettisoning cargo would increase the ship's temperature.
-	heat -= tons * MAXIMUM_TEMPERATURE * Heat();
 	
 	const Government *notForGov = wasAppeasing ? GetGovernment() : nullptr;
 	
@@ -3381,12 +3450,7 @@ void Ship::Jettison(const Outfit *outfit, int count, bool wasAppeasing)
 
 	cargo.Remove(outfit, count);
 	
-	// Jettisoned cargo must carry some of the ship's heat with it. Otherwise
-	// jettisoning cargo would increase the ship's temperature.
 	double mass = outfit->Mass();
-	heat -= count * mass * MAXIMUM_TEMPERATURE * Heat();
-	
-	const Government *notForGov = wasAppeasing ? GetGovernment() : nullptr;
 	
 	const int perBox = (mass <= 0.) ? count : (mass > Flotsam::TONS_PER_BOX) ? 1 : static_cast<int>(Flotsam::TONS_PER_BOX / mass);
 	while(count > 0)
