@@ -127,8 +127,6 @@ void SpriteQueue::operator()()
 			lock.unlock();
 			
 			// Load the sprite.
-			// TODO: investigate catching exceptions from Load() (e.g. bad_alloc), to enable
-			// the UI thread to display a message prior to terminating the process.
 			imageSet->Load();
 			
 			{

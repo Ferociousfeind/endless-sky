@@ -21,7 +21,6 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include <vector>
 
 class Effect;
-class Government;
 class Outfit;
 class Ship;
 class Visual;
@@ -31,8 +30,8 @@ class Visual;
 class Flotsam : public Body {
 public:
 	// Constructors for flotsam carrying either a commodity or an outfit.
-	Flotsam(const std::string &commodity, int count, const Government *sourceGovernment = nullptr);
-	Flotsam(const Outfit *outfit, int count, const Government *sourceGovernment = nullptr);
+	Flotsam(const std::string &commodity, int count);
+	Flotsam(const Outfit *outfit, int count);
 	
 	/* Functions provided by the Body base class:
 	Frame GetFrame(int step = -1) const;
@@ -56,10 +55,6 @@ public:
 	
 	// This is the one ship that cannot pick up this flotsam.
 	const Ship *Source() const;
-	// Ships from this Government should not pick up this flotsam because it
-	// was explicitly dumped by a member of this government. (NPCs typically
-	// perform this type of dumping to appease pirates.)
-	const Government *SourceGovernment() const;
 	// This is what the flotsam contains:
 	const std::string &CommodityType() const;
 	const Outfit *OutfitType() const;
@@ -87,7 +82,6 @@ private:
 	std::string commodity;
 	const Outfit *outfit = nullptr;
 	int count = 0;
-	const Government *sourceGovernment = nullptr;
 };
 
 

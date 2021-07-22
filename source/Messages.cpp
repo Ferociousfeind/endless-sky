@@ -19,17 +19,17 @@ using namespace std;
 namespace {
 	mutex incomingMutex;
 	
-	vector<pair<string, Messages::Importance>> incoming;
+	vector<pair<string, bool>> incoming;
 	vector<Messages::Entry> list;
 }
 
 
 
-// Add a message to the list along with its level of importance
-void Messages::Add(const string &message, Importance importance)
+// Add a message to the list.
+void Messages::Add(const string &message, bool isImportant)
 {
 	lock_guard<mutex> lock(incomingMutex);
-	incoming.emplace_back(message, importance);
+	incoming.emplace_back(message, isImportant);
 }
 
 
@@ -42,14 +42,14 @@ const vector<Messages::Entry> &Messages::Get(int step)
 	lock_guard<mutex> lock(incomingMutex);
 	
 	// Load the incoming messages.
-	for(const pair<string, Importance> &item : incoming)
+	for(const pair<string, bool> &item : incoming)
 	{
 		const string &message = item.first;
-		Importance importance = item.second;
+		bool isImportant = item.second;
 		
 		// If this message is not important and it is already being shown in the
 		// list, ignore it.
-		if(importance == Importance::Low)
+		if(!isImportant)
 		{
 			bool skip = false;
 			for(const Messages::Entry &entry : list)
@@ -67,7 +67,7 @@ const vector<Messages::Entry> &Messages::Get(int step)
 			// limit how many of them appear at once.
 			it->step -= 60;
 			// Also erase messages that have reached the end of their lifetime.
-			if((importance != Importance::Low && it->message == message) || it->step < step - 1000)
+			if((isImportant && it->message == message) || it->step < step - 1000)
 				it = list.erase(it);
 			else
 				++it;

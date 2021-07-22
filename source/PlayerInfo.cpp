@@ -547,8 +547,7 @@ void PlayerInfo::IncrementDate()
 	// Check if any missions have failed because of deadlines.
 	for(Mission &mission : missions)
 		if(mission.CheckDeadline(date) && mission.IsVisible())
-			Messages::Add("You failed to meet the deadline for the mission \"" + mission.Name() + "\"."
-				, Messages::Importance::High);
+			Messages::Add("You failed to meet the deadline for the mission \"" + mission.Name() + "\".");
 	
 	// Check what salaries and tribute the player receives.
 	int64_t total[2] = {0, 0};
@@ -569,7 +568,7 @@ void PlayerInfo::IncrementDate()
 		if(total[1])
 			message += Format::Credits(total[1]) + " credits in tribute";
 		message += ".";
-		Messages::Add(message, Messages::Importance::High);
+		Messages::Add(message);
 		accounts.AddCredits(total[0] + total[1]);
 	}
 	
@@ -583,7 +582,7 @@ void PlayerInfo::IncrementDate()
 	// summarizes the payments that were made.
 	string message = accounts.Step(assets, Salaries(), Maintenance());
 	if(!message.empty())
-		Messages::Add(message, Messages::Importance::High);
+		Messages::Add(message);
 	
 	// Reset the reload counters for all your ships.
 	for(const shared_ptr<Ship> &ship : ships)
@@ -1220,7 +1219,7 @@ void PlayerInfo::Land(UI *ui)
 			flagship->AddCrew(added);
 			Messages::Add("You hire " + to_string(added) + (added == 1
 					? " extra crew member to fill your now-empty bunk."
-					: " extra crew members to fill your now-empty bunks."), Messages::Importance::High);
+					: " extra crew members to fill your now-empty bunks."));
 		}
 	}
 	
@@ -1323,8 +1322,7 @@ bool PlayerInfo::TakeOff(UI *ui)
 		if(extra)
 		{
 			flagship->AddCrew(-extra);
-			Messages::Add("You fired " + to_string(extra) + " crew members to free up bunks for passengers."
-				, Messages::Importance::High);
+			Messages::Add("You fired " + to_string(extra) + " crew members to free up bunks for passengers.");
 			flagship->Cargo().SetBunks(flagship->Attributes().Get("bunks") - flagship->Crew());
 			cargo.TransferAll(flagship->Cargo());
 		}
@@ -1334,8 +1332,7 @@ bool PlayerInfo::TakeOff(UI *ui)
 	if(extra > 0)
 	{
 		flagship->AddCrew(-extra);
-		Messages::Add("You fired " + to_string(extra) + " crew members because you have no bunks for them."
-			, Messages::Importance::High);
+		Messages::Add("You fired " + to_string(extra) + " crew members because you have no bunks for them.");
 		flagship->Cargo().SetBunks(flagship->Attributes().Get("bunks") - flagship->Crew());
 	}
 	
@@ -1377,7 +1374,7 @@ bool PlayerInfo::TakeOff(UI *ui)
 		{
 			// The remaining uncarried ships are launched alongside the player.
 			string message = (uncarried > 1) ? "Some escorts were" : "One escort was";
-			Messages::Add(message + " unable to dock with a carrier.", Messages::Importance::High);
+			Messages::Add(message + " unable to dock with a carrier.");
 		}
 	}
 	
@@ -1390,7 +1387,7 @@ bool PlayerInfo::TakeOff(UI *ui)
 		{
 			if(it.first->IsVisible())
 				Messages::Add("Mission \"" + it.first->Name()
-					+ "\" failed because you do not have space for the cargo.", Messages::Importance::High);
+					+ "\" failed because you do not have space for the cargo.");
 			missionsToRemove.push_back(it.first);
 		}
 	for(const auto &it : cargo.PassengerList())
@@ -1398,7 +1395,7 @@ bool PlayerInfo::TakeOff(UI *ui)
 		{
 			if(it.first->IsVisible())
 				Messages::Add("Mission \"" + it.first->Name()
-					+ "\" failed because you do not have enough passenger bunks free.", Messages::Importance::High);
+					+ "\" failed because you do not have enough passenger bunks free.");
 			missionsToRemove.push_back(it.first);
 			
 		}
@@ -1456,7 +1453,7 @@ bool PlayerInfo::TakeOff(UI *ui)
 			out << " (for a profit of " << (income - totalBasis) << " credits).";
 		else
 			out << ".";
-		Messages::Add(out.str(), Messages::Importance::High);
+		Messages::Add(out.str());
 	}
 	
 	return true;
@@ -2001,10 +1998,10 @@ void PlayerInfo::SetTravelDestination(const Planet *planet)
 
 
 
-// Check which secondary weapons the player has selected.
-const set<const Outfit *> &PlayerInfo::SelectedWeapons() const
+// Check which secondary weapon the player has selected.
+const Outfit *PlayerInfo::SelectedWeapon() const
 {
-	return selectedWeapons;
+	return selectedWeapon;
 }
 
 
@@ -2015,52 +2012,21 @@ void PlayerInfo::SelectNext()
 	if(!flagship || flagship->Outfits().empty())
 		return;
 	
-	// If multiple weapons were selected, then switch to selecting none.
-	if(selectedWeapons.size() > 1)
-	{
-		selectedWeapons.clear();
-		return;
-	}
-	
-	// If no weapon was selected, then we scan from the beginning.
-	auto it = flagship->Outfits().begin();
-	bool hadSingleWeaponSelected = (selectedWeapons.size() == 1);
-	
-	// If a single weapon was selected, then move the iterator to the
-	// outfit directly after it.
-	if(hadSingleWeaponSelected)
-	{
-		auto selectedOutfit = *(selectedWeapons.begin());
-		it = flagship->Outfits().find(selectedOutfit);
-		if(it != flagship->Outfits().end())
-			++it;
-	}
+	// Start with the currently selected weapon, if any.
+	auto it = flagship->Outfits().find(selectedWeapon);
+	if(it == flagship->Outfits().end())
+		it = flagship->Outfits().begin();
+	else
+		++it;
 	
 	// Find the next secondary weapon.
 	for( ; it != flagship->Outfits().end(); ++it)
 		if(it->first->Icon())
 		{
-			selectedWeapons.clear();
-			selectedWeapons.insert(it->first);
+			selectedWeapon = it->first;
 			return;
 		}
-	
-	// If no weapon was selected and we didn't find any weapons at this point,
-	// then the player just doesn't have any secondary weapons.
-	if(!hadSingleWeaponSelected)
-		return;
-	
-	// Reached the end of the list. Select all possible secondary weapons here.
-	it = flagship->Outfits().begin();
-	for( ; it != flagship->Outfits().end(); ++it)
-		if(it->first->Icon())
-			selectedWeapons.insert(it->first);
-	
-	// If we have only one weapon selected at this point, then the player
-	// only has a single secondary weapon. Clear the list, since the weapon
-	// was selected when we entered this function.
-	if(selectedWeapons.size() == 1)
-		selectedWeapons.clear();
+	selectedWeapon = nullptr;
 }
 
 

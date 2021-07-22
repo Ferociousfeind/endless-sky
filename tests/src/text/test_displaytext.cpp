@@ -40,9 +40,7 @@ TEST_CASE( "DisplayText class", "[text][DisplayText]" ) {
 	}
 	SECTION( "Construction Traits" ) {
 		CHECK( std::is_default_constructible<T>::value );
-		// In gcc-5 (Steam Scout Runtime), std::string is not default nothrow constructible
-		CHECK( std::is_nothrow_default_constructible<T>::value ==
-			std::is_nothrow_default_constructible<std::string>::value );
+		CHECK( std::is_nothrow_default_constructible<T>::value );
 		CHECK( std::is_copy_constructible<T>::value );
 		// Copying a string is not "trivial."
 		CHECK_FALSE( std::is_trivially_copy_constructible<T>::value );
@@ -82,9 +80,7 @@ TEST_CASE( "DisplayText class", "[text][DisplayText]" ) {
 		CHECK_FALSE( std::is_trivially_move_assignable<T>::value );
 		CHECK( std::is_trivially_move_assignable<T>::value ==
 			std::is_trivially_move_assignable<std::string>::value );
-		// In gcc-5 (Steam Scout Runtime), move-assigning a string may throw
-		CHECK( std::is_nothrow_move_assignable<T>::value ==
-			std::is_nothrow_move_assignable<std::string>::value );
+		CHECK( std::is_nothrow_move_assignable<T>::value );
 	}
 }
 // #endregion unit tests

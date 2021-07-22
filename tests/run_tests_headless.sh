@@ -1,6 +1,4 @@
 #!/bin/bash
-set -e
-
 # Run headless "acceptance tests" using Xvfb
 # These tests involve booting the game, loading particular saved games, and making assertions
 # about the state of the game universe. Some tests will involve issuing basic commands.

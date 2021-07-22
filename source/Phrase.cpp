@@ -15,6 +15,7 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "DataNode.h"
 #include "text/Format.h"
 #include "GameData.h"
+#include "Random.h"
 
 using namespace std;
 
@@ -69,7 +70,7 @@ string Phrase::Get() const
 	{
 		if(!part.choices.empty())
 		{
-			const auto &choice = part.choices.Get();
+			const auto &choice = part.choices[Random::Int(part.choices.size())];
 			for(const auto &element : choice)
 				result += element.second ? element.second->Get() : element.first;
 		}
@@ -107,9 +108,7 @@ Phrase::Choice::Choice(const DataNode &node, bool isPhraseName)
 	// The given datanode should not have any children.
 	if(node.HasChildren())
 		node.begin()->PrintTrace("Skipping unrecognized child node:");
-	
-	weight = max<int>(1, node.Size() >= 2 ? node.Value(1) : 1);
-	
+
 	if(isPhraseName)
 	{
 		emplace_back(string{}, GameData::Phrases().Get(node.Token(0)));

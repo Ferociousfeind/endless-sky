@@ -212,8 +212,7 @@ bool MainPanel::KeyDown(SDL_Keycode key, Uint16 mod, const Command &command, boo
 	else if(command.Has(Command::AMMO))
 	{
 		Preferences::ToggleAmmoUsage();
-		Messages::Add("Your escorts will now expend ammo: " + Preferences::AmmoUsage() + "."
-			, Messages::Importance::High);
+		Messages::Add("Your escorts will now expend ammo: " + Preferences::AmmoUsage() + ".");
 	}
 	else if((key == SDLK_MINUS || key == SDLK_KP_MINUS) && !command)
 		Preferences::ZoomViewOut();
@@ -407,9 +406,9 @@ bool MainPanel::ShowHailPanel()
 		target.reset();
 	
 	if(flagship->IsEnteringHyperspace())
-		Messages::Add("Unable to send hail: your flagship is entering hyperspace.", Messages::Importance::High);
+		Messages::Add("Unable to send hail: your flagship is entering hyperspace.");
 	else if(flagship->Cloaking() == 1.)
-		Messages::Add("Unable to send hail: your flagship is cloaked.", Messages::Importance::High);
+		Messages::Add("Unable to send hail: your flagship is cloaked.");
 	else if(target)
 	{
 		// If the target is out of system, always report a generic response
@@ -417,10 +416,9 @@ bool MainPanel::ShowHailPanel()
 		// not. If it's in system and jumping, report that.
 		if(target->Zoom() < 1. || target->IsDestroyed() || target->GetSystem() != player.GetSystem()
 				|| target->Cloaking() == 1.)
-			Messages::Add("Unable to hail target " + target->Noun() + ".", Messages::Importance::High);
+			Messages::Add("Unable to hail target " + target->Noun() + ".");
 		else if(target->IsEnteringHyperspace())
-			Messages::Add("Unable to send hail: " + target->Noun() + " is entering hyperspace."
-				, Messages::Importance::High);
+			Messages::Add("Unable to send hail: " + target->Noun() + " is entering hyperspace.");
 		else
 		{
 			GetUI()->Push(new HailPanel(player, target));
@@ -431,11 +429,11 @@ bool MainPanel::ShowHailPanel()
 	{
 		const Planet *planet = flagship->GetTargetStellar()->GetPlanet();
 		if(!planet)
-			Messages::Add("Unable to send hail.", Messages::Importance::High);
+			Messages::Add("Unable to send hail.");
 		else if(planet->IsWormhole())
 		{
 			static const Phrase *wormholeHail = GameData::Phrases().Get("wormhole hail");
-			Messages::Add(wormholeHail->Get(), Messages::Importance::High);
+			Messages::Add(wormholeHail->Get());
 		}
 		else if(planet->IsInhabited())
 		{
@@ -443,11 +441,10 @@ bool MainPanel::ShowHailPanel()
 			return true;
 		}
 		else
-			Messages::Add("Unable to send hail: " + planet->Noun() + " is not inhabited."
-				, Messages::Importance::High);
+			Messages::Add("Unable to send hail: " + planet->Noun() + " is not inhabited.");
 	}
 	else
-		Messages::Add("Unable to send hail: no target selected.", Messages::Importance::High);
+		Messages::Add("Unable to send hail: no target selected.");
 	
 	return false;
 }

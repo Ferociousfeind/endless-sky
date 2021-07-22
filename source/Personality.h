@@ -27,7 +27,7 @@ class DataWriter;
 // used to make some fleets noticeably different from others.
 class Personality {
 public:
-	Personality() noexcept;
+	Personality();
 	
 	void Load(const DataNode &node);
 	void Save(DataWriter &out) const;

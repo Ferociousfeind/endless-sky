@@ -15,18 +15,34 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 // Include only the tested class's header.
 #include "../../source/ConditionSet.h"
 
-// Include a helper for creating well-formed DataNodes (to enable creating non-empty ConditionSets).
-#include "datanode-factory.h"
-// Include a helper for capturing & asserting on logged output.
-#include "output-capture.hpp"
+// Include DataFile & DataNode, to enable creating non-empty ConditionSets.
+#include "../../source/DataFile.h"
+#include "../../source/DataNode.h"
 
 // ... and any system includes needed for the test file.
 #include <map>
+#include <sstream>
 #include <string>
+#include <vector>
 
 namespace { // test namespace
 
 // #region mock data
+// Method to convert text input into consumable DataNodes.
+std::vector<DataNode> AsDataNodes(std::string text)
+{
+	std::stringstream in;
+	in.str(text);
+	const auto file = DataFile{in};
+	
+	return std::vector<DataNode>{std::begin(file), std::end(file)};
+}
+// Convert the text to a list of nodes, and return the first node.
+const DataNode AsDataNode(std::string text)
+{
+	auto nodes = AsDataNodes(text);
+	return nodes.empty() ? DataNode{} : *nodes.begin();
+}
 // #endregion mock data
 
 
@@ -58,9 +74,6 @@ SCENARIO( "Creating a ConditionSet" , "[ConditionSet][Creation]" ) {
 }
 
 SCENARIO( "Extending a ConditionSet", "[ConditionSet][Creation]" ) {
-	const std::string validationWarning = "\nAn expression must either perform a comparison or assign a value:\n";
-	OutputSink warnings(std::cerr);
-	
 	GIVEN( "an empty ConditionSet" ) {
 		auto set = ConditionSet{};
 		REQUIRE( set.IsEmpty() );
@@ -68,22 +81,14 @@ SCENARIO( "Extending a ConditionSet", "[ConditionSet][Creation]" ) {
 		THEN( "no expressions are added from empty nodes" ) {
 			set.Add(DataNode{});
 			REQUIRE( set.IsEmpty() );
-			AND_THEN( "a log message is printed to assist the user" ) {
-				REQUIRE( warnings.Flush() == validationWarning );
-			}
 		}
 		THEN( "no expressions are added from invalid nodes" ) {
-			const std::string invalidNodeText = "has";
-			set.Add(AsDataNode(invalidNodeText));
+			set.Add(AsDataNode("has"));
 			REQUIRE( set.IsEmpty() );
-			AND_THEN( "a log message is printed to assist the user" ) {
-				REQUIRE( warnings.Flush() == validationWarning + invalidNodeText + '\n' );
-			}
 		}
 		THEN( "new expressions can be added from valid nodes" ) {
 			set.Add(AsDataNode("never"));
 			REQUIRE_FALSE( set.IsEmpty() );
-			REQUIRE( warnings.Flush() == "" );
 		}
 	}
 }

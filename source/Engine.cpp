@@ -13,7 +13,6 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #include "Engine.h"
 
 #include "Audio.h"
-#include "CategoryTypes.h"
 #include "CoreStartData.h"
 #include "Effect.h"
 #include "Files.h"
@@ -74,7 +73,7 @@ namespace {
 			if(count == 0 || count == 2)
 				return Radar::BLINK;
 		}
-		if(ship.IsDisabled() || (ship.IsOverheated() && ((step / 20) % 2)))
+		if(ship.IsDisabled())
 			return Radar::INACTIVE;
 		if(ship.IsYours() || (ship.GetPersonality().IsEscort() && !ship.GetGovernment()->IsEnemy()))
 			return Radar::PLAYER;
@@ -165,7 +164,7 @@ namespace {
 		else
 			tag = ship->ModelName() + " (" + gov + "): ";
 		
-		Messages::Add(tag + message, Messages::Importance::High);
+		Messages::Add(tag + message);
 	}
 	
 	void DrawFlareSprites(const Ship &ship, DrawList &draw, const vector<Ship::EnginePoint> &enginePoints, const vector<pair<Body, int>> &flareSprites, uint8_t side)
@@ -365,7 +364,7 @@ void Engine::Place(const list<NPC> &npcs, shared_ptr<Ship> flagship)
 			if(ship->HasBays())
 			{
 				ship->UnloadBays();
-				for(const string &bayType : GameData::Category(CategoryType::BAY))
+				for(const string &bayType : Ship::BAY_TYPES)
 				{
 					int baysTotal = ship->BaysTotal(bayType);
 					if(baysTotal)
@@ -618,9 +617,6 @@ void Engine::Step(bool isActive)
 		}
 	}
 	
-	if(flagship && flagship->IsOverheated())
-		Messages::Add("Your ship has overheated.", Messages::Importance::High);
-	
 	// Clear the HUD information from the previous frame.
 	info = Information();
 	if(flagship && flagship->Hull())
@@ -640,13 +636,23 @@ void Engine::Step(bool isActive)
 			flagship->Attributes().Get("fuel capacity") * .01);
 		info.SetBar("energy", flagship->Energy());
 		double heat = flagship->Heat();
-		info.SetBar("heat", min(1., heat));
+		info.SetBar("cold", 1 - min(1., 2 * heat));
+		if(heat < 0.05)
+		{
+			info.SetBar("overcold", 1 - min(1., 20. * heat));
+			if((step / 20) % 2)
+				info.SetBar("overcold blink", 1 - min(1., 20. * heat));
+		}
+		
+		info.SetBar("heat", min(1., 2 * (heat - 0.5)));
 		// If heat is above 100%, draw a second overlaid bar to indicate the
 		// total heat level.
 		if(heat > 1.)
-			info.SetBar("overheat", min(1., heat - 1.));
-		if(flagship->IsOverheated() && (step / 20) % 2)
-			info.SetBar("overheat blink", min(1., heat));
+		{
+			info.SetBar("overheat", min(1., 2. * (heat - 1.)));
+			if((step / 20) % 2)
+				info.SetBar("overheat blink", min(1., 2. * (heat - 1.)));
+		}
 		info.SetBar("shields", flagship->Shields());
 		info.SetBar("hull", flagship->Hull(), 20.);
 		info.SetBar("disabled hull", min(flagship->Hull(), flagship->DisabledHull()), 20.);
@@ -1017,8 +1023,7 @@ void Engine::Draw() const
 		if(pos.Y() < ammoBox.Top() + ammoPad)
 			break;
 		
-		const auto &playerSelectedWeapons = player.SelectedWeapons();
-		bool isSelected = (playerSelectedWeapons.find(it.first) != playerSelectedWeapons.end());
+		bool isSelected = it.first == player.SelectedWeapon();
 		
 		SpriteShader::Draw(it.first->Icon(), pos + iconOff);
 		SpriteShader::Draw(isSelected ? selectedSprite : unselectedSprite, pos + boxOff);
@@ -1132,7 +1137,7 @@ void Engine::EnterSystem()
 	
 	Messages::Add("Entering the " + system->Name() + " system on "
 		+ today.ToString() + (system->IsInhabited(flagship) ?
-			"." : ". No inhabited planets detected."), Messages::Importance::High);
+			"." : ". No inhabited planets detected."));
 	
 	// Preload landscapes and determine if the player used a wormhole.
 	// (It is allowed for a wormhole's exit point to have no sprite.)
@@ -1219,7 +1224,7 @@ void Engine::EnterSystem()
 				{
 					raidFleet->Place(*system, newShips);
 					Messages::Add("Your fleet has attracted the interest of a "
-							+ raidGovernment->GetName() + " raiding party.", Messages::Importance::High);
+							+ raidGovernment->GetName() + " raiding party.");
 				}
 	}
 	
@@ -1237,8 +1242,8 @@ void Engine::EnterSystem()
 	// since the new player ships can make at most four jumps before landing.
 	if(today <= player.StartData().GetDate() + 4)
 	{
-		Messages::Add(GameData::HelpMessage("basics 1"), Messages::Importance::High);
-		Messages::Add(GameData::HelpMessage("basics 2"), Messages::Importance::High);
+		Messages::Add(GameData::HelpMessage("basics 1"));
+		Messages::Add(GameData::HelpMessage("basics 2"));
 	}
 }
 
@@ -1816,11 +1821,11 @@ void Engine::HandleMouseClicks()
 					{
 						if(!planet->CanLand(*flagship))
 							Messages::Add("The authorities on " + planet->Name()
-									+ " refuse to let you land.", Messages::Importance::High);
+									+ " refuse to let you land.");
 						else
 						{
 							activeCommands |= Command::LAND;
-							Messages::Add("Landing on " + planet->Name() + ".", Messages::Importance::High);
+							Messages::Add("Landing on " + planet->Name() + ".");
 						}
 					}
 					else
@@ -1988,16 +1993,14 @@ void Engine::DoCollisions(Projectile &projectile)
 				if(isSafe && projectile.Target() != ship && !gov->IsEnemy(ship->GetGovernment()))
 					continue;
 				
-				int eventType = ship->TakeDamage(visuals, projectile.GetWeapon(), 1.,
-					projectile.DistanceTraveled(), projectile.Position(), projectile.GetGovernment(), ship != hit.get());
+				int eventType = ship->TakeDamage(projectile, ship != hit.get());
 				if(eventType)
 					eventQueue.emplace_back(gov, ship->shared_from_this(), eventType);
 			}
 		}
 		else if(hit)
 		{
-			int eventType = hit->TakeDamage(visuals, projectile.GetWeapon(), 1.,
-				projectile.DistanceTraveled(), projectile.Position(), projectile.GetGovernment());
+			int eventType = hit->TakeDamage(projectile);
 			if(eventType)
 				eventQueue.emplace_back(gov, hit, eventType);
 		}
@@ -2036,11 +2039,7 @@ void Engine::DoWeather(Weather &weather)
 		// and max ranges at the hazard's origin. Any ship touching this ring takes
 		// hazard damage.
 		for(Body *body : shipCollisions.Ring(Point(), hazard->MinRange(), hazard->MaxRange()))
-		{
-			Ship *hit = reinterpret_cast<Ship *>(body);
-			double distanceTraveled = hit->Position().Length() - hit->GetMask().Radius();
-			hit->TakeDamage(visuals, *hazard, multiplier, distanceTraveled, Point(), nullptr, hazard->BlastRadius() > 0.);
-		}
+			reinterpret_cast<Ship *>(body)->TakeHazardDamage(visuals, hazard, multiplier);
 	}
 }
 
@@ -2054,8 +2053,7 @@ void Engine::DoCollection(Flotsam &flotsam)
 	for(Body *body : shipCollisions.Circle(flotsam.Position(), 5.))
 	{
 		Ship *ship = reinterpret_cast<Ship *>(body);
-		if(!ship->CannotAct() && ship != flotsam.Source() && ship->GetGovernment() != flotsam.SourceGovernment()
-			&& ship->Cargo().Free() >= flotsam.UnitSize())
+		if(!ship->CannotAct() && ship != flotsam.Source() && ship->Cargo().Free() >= flotsam.UnitSize())
 		{
 			collector = ship;
 			break;
@@ -2106,7 +2104,7 @@ void Engine::DoCollection(Flotsam &flotsam)
 		int free = collector->Cargo().Free();
 		message += " (" + to_string(free) + (free == 1 ? " ton" : " tons");
 		message += " of free space remaining.)";
-		Messages::Add(message, Messages::Importance::High);
+		Messages::Add(message);
 	}
 }
 
@@ -2227,7 +2225,7 @@ void Engine::AddSprites(const Ship &ship)
 		// Draw cloaked/cloaking sprites swizzled red, and overlay this solid
 		// sprite with an increasingly transparent "regular" sprite.
 		if(drawCloaked)
-			itemsToDraw.AddSwizzled(body, 27);
+			itemsToDraw.AddSwizzled(body, 7);
 		itemsToDraw.Add(body, cloak);
 	};
 	
@@ -2243,8 +2241,8 @@ void Engine::AddSprites(const Ship &ship)
 	if(ship.IsSteering() && !ship.SteeringEnginePoints().empty())
 		DrawFlareSprites(ship, draw[calcTickTock], ship.SteeringEnginePoints(), ship.Attributes().SteeringFlareSprites(), Ship::EnginePoint::UNDER);
 	
-	auto drawHardpoint = [&drawObject, &ship](const Hardpoint &hardpoint) -> void
-	{
+	drawObject(ship);
+	for(const Hardpoint &hardpoint : ship.Weapons())
 		if(hardpoint.GetOutfit() && hardpoint.GetOutfit()->HardpointSprite().HasSprite())
 		{
 			Body body(
@@ -2255,15 +2253,6 @@ void Engine::AddSprites(const Ship &ship)
 				ship.Zoom());
 			drawObject(body);
 		}
-	};
-	
-	for(const Hardpoint &hardpoint : ship.Weapons())
-		if(hardpoint.IsUnder())
-			drawHardpoint(hardpoint);
-	drawObject(ship);
-	for(const Hardpoint &hardpoint : ship.Weapons())
-		if(!hardpoint.IsUnder())
-			drawHardpoint(hardpoint);
 	
 	if(ship.IsThrusting() && !ship.EnginePoints().empty())
 		DrawFlareSprites(ship, draw[calcTickTock], ship.EnginePoints(), ship.Attributes().FlareSprites(), Ship::EnginePoint::OVER);

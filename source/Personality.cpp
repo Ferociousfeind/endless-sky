@@ -87,7 +87,7 @@ namespace {
 
 
 // Default settings for player's ships.
-Personality::Personality() noexcept
+Personality::Personality()
 	: flags(DISABLES), confusionMultiplier(DEFAULT_CONFUSION), aimMultiplier(1.)
 {
 }

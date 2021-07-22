@@ -288,15 +288,13 @@ bool HailPanel::KeyDown(SDL_Keycode key, Uint16 mod, const Command &command, boo
 			{
 				ship->GetGovernment()->Bribe();
 				Messages::Add("You bribed a " + ship->GetGovernment()->GetName() + " ship "
-					+ Format::Credits(bribe) + " credits to refrain from attacking you today."
-						, Messages::Importance::High);
+					+ Format::Credits(bribe) + " credits to refrain from attacking you today.");
 			}
 			else
 			{
 				planet->Bribe();
 				Messages::Add("You bribed the authorities on " + planet->Name() + " "
-					+ Format::Credits(bribe) + " credits to permit you to land."
-						, Messages::Importance::High);
+					+ Format::Credits(bribe) + " credits to permit you to land.");
 			}
 			
 			player.Accounts().AddCredits(-bribe);

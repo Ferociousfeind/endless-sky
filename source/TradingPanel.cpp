@@ -77,7 +77,7 @@ TradingPanel::~TradingPanel()
 		else
 			message += "for a total profit of " + Format::Credits(profit) + " credits.";
 		
-		Messages::Add(message, Messages::Importance::High);
+		Messages::Add(message);
 	}
 }
 
