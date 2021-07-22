@@ -558,7 +558,7 @@ ship "Berserker"
 		"shields" 2200
 		"hull" 500
 		"required crew" 1
-		"bunks" 3
+		"bunks" 5
 		"mass" 110
 		"drag" 2.2
 		"heat dissipation" .85
@@ -1572,7 +1572,7 @@ ship "Flivver"
 		"shields" 1400
 		"hull" 200
 		"required crew" 1
-		"bunks" 3
+		"bunks" 5
 		"mass" 40
 		"drag" 1.0
 		"heat dissipation" .9
@@ -1617,8 +1617,8 @@ ship "Freighter"
 		"cost" 730000
 		"shields" 2000
 		"hull" 2000
-		"required crew" 2
-		"bunks" 7
+		"required crew" 1
+		"bunks" 8
 		"mass" 240
 		"drag" 5.6
 		"heat dissipation" .6
@@ -1842,7 +1842,7 @@ ship "Hauler"
 		"shields" 2500
 		"hull" 3700
 		"required crew" 1
-		"bunks" 12
+		"bunks" 16
 		"mass" 250
 		"drag" 10.5
 		"heat dissipation" .6
@@ -1900,7 +1900,7 @@ ship "Hauler II"
 		"shields" 2900
 		"hull" 5200
 		"required crew" 1
-		"bunks" 12
+		"bunks" 16
 		"mass" 360
 		"drag" 11.5
 		"heat dissipation" .6
@@ -1959,7 +1959,7 @@ ship "Hauler III"
 		"shields" 3300
 		"hull" 6700
 		"required crew" 1
-		"bunks" 12
+		"bunks" 16
 		"mass" 470
 		"drag" 12.5
 		"heat dissipation" .6
@@ -2018,7 +2018,7 @@ ship "Hawk"
 		"shields" 2500
 		"hull" 500
 		"required crew" 1
-		"bunks" 4
+		"bunks" 6
 		"mass" 150
 		"drag" 2.1
 		"heat dissipation" .8
@@ -2066,7 +2066,7 @@ ship "Headhunter"
 		"shields" 3800
 		"hull" 700
 		"required crew" 1
-		"bunks" 4
+		"bunks" 7
 		"mass" 120
 		"drag" 2.6
 		"heat dissipation" .8
@@ -2265,8 +2265,8 @@ ship "Manta"
 		"cost" 3400000
 		"shields" 5900
 		"hull" 1500
-		"required crew" 2
-		"bunks" 10
+		"required crew" 1
+		"bunks" 12
 		"mass" 170
 		"drag" 4.7
 		"heat dissipation" .8
@@ -2323,7 +2323,7 @@ ship "Modified Argosy"
 		"shields" 4800
 		"hull" 1900
 		"required crew" 1
-		"bunks" 12
+		"bunks" 13
 		"mass" 250
 		"drag" 6.2
 		"heat dissipation" .6
@@ -2447,7 +2447,7 @@ ship "Nest"
 		"shields" 2500
 		"hull" 3700
 		"required crew" 1
-		"bunks" 14
+		"bunks" 18
 		"mass" 250
 		"drag" 10.5
 		"heat dissipation" .67
@@ -2630,7 +2630,7 @@ ship "Quicksilver"
 		"shields" 3000
 		"hull" 800
 		"required crew" 1
-		"bunks" 6
+		"bunks" 8
 		"mass" 120
 		"drag" 2.7
 		"heat dissipation" .8
@@ -2790,7 +2790,7 @@ ship "Roost"
 		"shields" 2900
 		"hull" 5200
 		"required crew" 1
-		"bunks" 16
+		"bunks" 20
 		"mass" 360
 		"drag" 11.5
 		"heat dissipation" .67
@@ -2954,7 +2954,7 @@ ship "Skein"
 		"shields" 3300
 		"hull" 6700
 		"required crew" 1
-		"bunks" 18
+		"bunks" 24
 		"mass" 470
 		"drag" 12.5
 		"heat dissipation" .71
@@ -3326,7 +3326,7 @@ ship "Wasp"
 		"shields" 1500
 		"hull" 500
 		"required crew" 1
-		"bunks" 2
+		"bunks" 3
 		"mass" 60
 		"drag" 1.2
 		"heat dissipation" .8
