@@ -16,8 +16,8 @@ ship "Marauder Arrow"
 		"cost" 1320000
 		"shields" 2300
 		"hull" 500
-		"required crew" 2
-		"bunks" 5
+		"required crew" 1
+		"bunks" 8
 		"mass" 145
 		"drag" 2.0
 		"heat dissipation" .85
@@ -356,8 +356,8 @@ ship "Marauder Firebird"
 		"cost" 4100000
 		"shields" 6400
 		"hull" 3600
-		"required crew" 10
-		"bunks" 25
+		"required crew" 2
+		"bunks" 26
 		"mass" 350
 		"drag" 4.5
 		"heat dissipation" .6
@@ -472,7 +472,7 @@ ship "Marauder Leviathan"
 		"cost" 10800000
 		"shields" 16000
 		"hull" 5500
-		"required crew" 48
+		"required crew" 32
 		"bunks" 69
 		"mass" 640
 		"drag" 7.6
@@ -595,8 +595,8 @@ ship "Marauder Manta"
 		"cost" 3740000
 		"shields" 6500
 		"hull" 1750
-		"required crew" 7
-		"bunks" 11
+		"required crew" 1
+		"bunks" 15
 		"mass" 195
 		"drag" 4.7
 		"heat dissipation" .8
@@ -724,8 +724,8 @@ ship "Marauder Quicksilver"
 		"cost" 1200000
 		"shields" 3500
 		"hull" 900
-		"required crew" 4
-		"bunks" 7
+		"required crew" 1
+		"bunks" 10
 		"mass" 140
 		"drag" 2.7
 		"heat dissipation" .8
@@ -826,8 +826,8 @@ ship "Marauder Raven"
 		"cost" 2750000
 		"shields" 5200
 		"hull" 1600
-		"required crew" 7
-		"bunks" 14
+		"required crew" 4
+		"bunks" 16
 		"mass" 145
 		"drag" 3.7
 		"heat dissipation" .8
@@ -934,8 +934,8 @@ ship "Marauder Splinter"
 		"cost" 3400000
 		"shields" 5700
 		"hull" 1950
-		"required crew" 8
-		"bunks" 22
+		"required crew" 4
+		"bunks" 25
 		"mass" 275
 		"drag" 4.0
 		"heat dissipation" .7
