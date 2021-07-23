@@ -128,6 +128,7 @@ public:
 	double HullDamage() const;
 	double FuelDamage() const;
 	double HeatDamage() const;
+	double CoolingDamage() const;
 	double EnergyDamage() const;
 	// Status effects:
 	double IonDamage() const;
@@ -244,31 +245,32 @@ private:
 	double triggerRadius = 0.;
 	double blastRadius = 0.;
 	
-	static const int DAMAGE_TYPES = 14;
+	static const int DAMAGE_TYPES = 15;
 	static const int HIT_FORCE = 0;
 	// Normal damage types:
 	static const int SHIELD_DAMAGE = 1;
 	static const int HULL_DAMAGE = 2;
 	static const int FUEL_DAMAGE = 3;
 	static const int HEAT_DAMAGE = 4;
-	static const int ENERGY_DAMAGE = 5;
+	static const int COOLING_DAMAGE = 5;
+	static const int ENERGY_DAMAGE = 6;
 	// Status effects:
-	static const int ION_DAMAGE = 6;
-	static const int DISRUPTION_DAMAGE = 7;
-	static const int SLOWING_DAMAGE = 8;
+	static const int ION_DAMAGE = 7;
+	static const int DISRUPTION_DAMAGE = 8;
+	static const int SLOWING_DAMAGE = 9;
 	// Relative damage types:
-	static const int RELATIVE_SHIELD_DAMAGE = 9;
-	static const int RELATIVE_HULL_DAMAGE = 10;
-	static const int RELATIVE_FUEL_DAMAGE = 11;
-	static const int RELATIVE_HEAT_DAMAGE = 12;
-	static const int RELATIVE_ENERGY_DAMAGE = 13;
+	static const int RELATIVE_SHIELD_DAMAGE = 10;
+	static const int RELATIVE_HULL_DAMAGE = 11;
+	static const int RELATIVE_FUEL_DAMAGE = 12;
+	static const int RELATIVE_HEAT_DAMAGE = 13;
+	static const int RELATIVE_ENERGY_DAMAGE = 14;
 	mutable double damage[DAMAGE_TYPES] = {};
 	
 	double piercing = 0.;
 	
 	double rangeOverride = 0.;
 	double velocityOverride = 0.;
-
+	
 	bool hasDamageDropoff = false;
 	std::pair<double, double> damageDropoffRange;
 	double damageDropoffModifier;
@@ -341,6 +343,7 @@ inline double Weapon::ShieldDamage() const { return TotalDamage(SHIELD_DAMAGE); 
 inline double Weapon::HullDamage() const { return TotalDamage(HULL_DAMAGE); }
 inline double Weapon::FuelDamage() const { return TotalDamage(FUEL_DAMAGE); }
 inline double Weapon::HeatDamage() const { return TotalDamage(HEAT_DAMAGE); }
+inline double Weapon::CoolingDamage() const { return TotalDamage(COOLING_DAMAGE); }
 inline double Weapon::EnergyDamage() const { return TotalDamage(ENERGY_DAMAGE); }
 
 inline double Weapon::IonDamage() const { return TotalDamage(ION_DAMAGE); }
