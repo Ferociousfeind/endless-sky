@@ -3449,6 +3449,8 @@ void Ship::Jettison(const Outfit *outfit, int count, bool wasAppeasing)
 	cargo.Remove(outfit, count);
 	
 	double mass = outfit->Mass();
+
+	const Government *notForGov = wasAppeasing ? GetGovernment() : nullptr;
 	
 	const int perBox = (mass <= 0.) ? count : (mass > Flotsam::TONS_PER_BOX) ? 1 : static_cast<int>(Flotsam::TONS_PER_BOX / mass);
 	while(count > 0)
