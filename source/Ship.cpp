@@ -1743,9 +1743,9 @@ void Ship::Move(vector<Visual> &visuals, list<shared_ptr<Flotsam>> &flotsam)
 		if(isYours)
 		{
 			if(parent.lock())
-				Messages::Add("The " + name + " is moving erratically because of its low temperature.");
+				Messages::Add("The " + name + " is moving erratically because of its low temperature.", Messages::Importance::Low);
 			else
-				Messages::Add("Your ship is moving erratically because of its low temperature.");
+				Messages::Add("Your ship is moving erratically because of its low temperature.", Messages::Importance::Low);
 		}
 	}
 	
