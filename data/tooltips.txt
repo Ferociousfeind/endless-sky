@@ -2,6 +2,9 @@
 tip "active cooling:"
 	`Provides up to this amount of cooling per second. Active cooling requires energy, but if your heat level is low it runs at a lower cooling rate and lower energy draw. The amount of cooling is proportional to the temperature of your ship, reaching the full level only if you are about to overheat.`
 
+tip "active heating:"
+	`Provides up to this amount of heating per second. Active heating requires energy, but if your heat level is high enough it becomes a problem instead of a solution. The amount of heating is inversely proportional to the temperature of your ship, reaching the full level only if you are dangerously cold.`
+
 tip "afterburner energy:"
 	`Energy consumed per second when firing this afterburner.`
 
@@ -59,8 +62,14 @@ tip "cloaking heat:"
 tip "cooling:"
 	`Reduces heat by this amount per second. This is for when your ship's built-in heat dissipation is not sufficient to keep it from overheating.`
 
+tip "heatsink:"
+	`A material with a specific heat twice that of one ton of metal will be able to absorb twice the amount of heat energy per ton. This value represents the number of "dummy" tons this outfit adding to your ship's maximum heat capacity.`
+
 tip "cooling energy:"
 	`When active cooling is running at full strength (because your ship's temperature is approaching the overheating threshold) it will draw this much energy.`
+
+tip "heating energy:"
+	`When active heating is running at full strength (because your ship is extremely cold) it will draw this much energy.`
 
 tip "cooling inefficiency:"
 	`Interferes with your ship's ability to cool itself. Its cooling systems will only be about 75% effective at a cooling inefficiency of 5, and 30% at an inefficiency of 10.`
