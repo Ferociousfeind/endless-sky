@@ -3136,8 +3136,6 @@ double Ship::MaxReverseVelocity() const
 // it hit this ship, and add any visuals created as a result
 // of being hit.
 int Ship::TakeDamage(vector<Visual> &visuals, const Weapon &weapon, double damageScaling, double distanceTraveled, const Point &damagePosition, const Government *sourceGovernment, bool isBlast)
-{// A helper method for taking damage from either a projectile or a hazard.
-int Ship::TakeDamage(const Weapon &weapon, double damageScaling, double distanceTraveled, const Point &damagePosition, bool isBlast)
 {
 	if(isBlast && weapon.IsDamageScaled())
 	{
