@@ -1,10 +1,8 @@
 /* AI.cpp
 Copyright (c) 2014 by Michael Zahniser
-
 Endless Sky is free software: you can redistribute it and/or modify it under the
 terms of the GNU General Public License as published by the Free Software
 Foundation, either version 3 of the License, or (at your option) any later version.
-
 Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -575,14 +573,7 @@ void AI::Step(const PlayerInfo &player, Command &activeCommands)
 				continue;
 			}
 		}
-<<<<<<< HEAD
-		
-=======
-		// Overheated ships are effectively disabled, and cannot fire, cloak, etc.
-		if(it->IsOverheated())
-			continue;
 
->>>>>>> master
 		// Special case: if the player's flagship tries to board a ship to
 		// refuel it, that escort should hold position for boarding.
 		isStranded |= (flagship && it == flagship->GetTargetShip() && CanBoard(*flagship, *it)
