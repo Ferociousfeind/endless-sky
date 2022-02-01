@@ -1,10 +1,8 @@
 /* ShipInfoDisplay.cpp
 Copyright (c) 2014 by Michael Zahniser
-
 Endless Sky is free software: you can redistribute it and/or modify it under the
 terms of the GNU General Public License as published by the Free Software
 Foundation, either version 3 of the License, or (at your option) any later version.
-
 Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -273,7 +271,6 @@ void ShipInfoDisplay::UpdateAttributes(const Ship &ship, const Depreciation &dep
 	// Skip a spacer and the table header.
 	attributesHeight += 30;
 
-<<<<<<< HEAD
 	const double heatGeneration = attributes.Get("heat generation")
 		+ attributes.Get("solar heat")
 		+ attributes.Get("fuel heat");
@@ -285,17 +282,6 @@ void ShipInfoDisplay::UpdateAttributes(const Ship &ship, const Depreciation &dep
 		- attributes.Get("energy consumption")
 		- (idleHeat ? ((2. * idleHeat -1.) * attributes.Get("cooling energy"))
 		: ((1. -2. * idleHeat) * attributes.Get("heating energy")));
-=======
-	const double idleEnergyPerFrame = attributes.Get("energy generation")
-		+ attributes.Get("solar collection")
-		+ attributes.Get("fuel energy")
-		- attributes.Get("energy consumption")
-		- attributes.Get("cooling energy");
-	const double idleHeatPerFrame = attributes.Get("heat generation")
-		+ attributes.Get("solar heat")
-		+ attributes.Get("fuel heat")
-		- ship.CoolingEfficiency() * (attributes.Get("cooling") + attributes.Get("active cooling"));
->>>>>>> master
 	tableLabels.push_back("idle:");
 	energyTable.push_back(Format::Number(60. * idleEnergy));
 	heatTable.push_back(Format::Number(100. * idleHeat) + "%");
