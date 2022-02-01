@@ -1,10 +1,8 @@
 /* Weapon.h
 Copyright (c) 2015 by Michael Zahniser
-
 Endless Sky is free software: you can redistribute it and/or modify it under the
 terms of the GNU General Public License as published by the Free Software
 Foundation, either version 3 of the License, or (at your option) any later version.
-
 Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -274,13 +272,8 @@ private:
 	double splitRange = 0.;
 	double triggerRadius = 0.;
 	double blastRadius = 0.;
-<<<<<<< HEAD
-	
-	static const int DAMAGE_TYPES = 15;
-=======
 
-	static const int DAMAGE_TYPES = 18;
->>>>>>> master
+	static const int DAMAGE_TYPES = 19;
 	static const int HIT_FORCE = 0;
 	// Normal damage types:
 	static const int SHIELD_DAMAGE = 1;
@@ -290,38 +283,26 @@ private:
 	static const int COOLING_DAMAGE = 5;
 	static const int ENERGY_DAMAGE = 6;
 	// Status effects:
-<<<<<<< HEAD
 	static const int ION_DAMAGE = 7;
 	static const int DISRUPTION_DAMAGE = 8;
 	static const int SLOWING_DAMAGE = 9;
+	static const int DISCHARGE_DAMAGE = 10
+	static const int CORROSION_DAMAGE = 11;
+	static const int LEAK_DAMAGE = 12;
+	static const int BURN_DAMAGE = 13;
 	// Relative damage types:
-	static const int RELATIVE_SHIELD_DAMAGE = 10;
-	static const int RELATIVE_HULL_DAMAGE = 11;
-	static const int RELATIVE_FUEL_DAMAGE = 12;
-	static const int RELATIVE_HEAT_DAMAGE = 13;
-	static const int RELATIVE_ENERGY_DAMAGE = 14;
-=======
-	static const int ION_DAMAGE = 6;
-	static const int DISRUPTION_DAMAGE = 7;
-	static const int SLOWING_DAMAGE = 8;
-	static const int DISCHARGE_DAMAGE = 9;
-	static const int CORROSION_DAMAGE = 10;
-	static const int LEAK_DAMAGE = 11;
-	static const int BURN_DAMAGE = 12;
-	// Relative damage types:
-	static const int RELATIVE_SHIELD_DAMAGE = 13;
-	static const int RELATIVE_HULL_DAMAGE = 14;
-	static const int RELATIVE_FUEL_DAMAGE = 15;
-	static const int RELATIVE_HEAT_DAMAGE = 16;
-	static const int RELATIVE_ENERGY_DAMAGE = 17;
->>>>>>> master
+	static const int RELATIVE_SHIELD_DAMAGE = 14;
+	static const int RELATIVE_HULL_DAMAGE = 15;
+	static const int RELATIVE_FUEL_DAMAGE = 16;
+	static const int RELATIVE_HEAT_DAMAGE = 17;
+	static const int RELATIVE_ENERGY_DAMAGE = 18;
 	mutable double damage[DAMAGE_TYPES] = {};
 
 	double piercing = 0.;
 
 	double rangeOverride = 0.;
 	double velocityOverride = 0.;
-	
+
 	bool hasDamageDropoff = false;
 	std::pair<double, double> damageDropoffRange;
 	double damageDropoffModifier;
