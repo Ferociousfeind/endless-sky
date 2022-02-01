@@ -286,7 +286,7 @@ private:
 	static const int ION_DAMAGE = 7;
 	static const int DISRUPTION_DAMAGE = 8;
 	static const int SLOWING_DAMAGE = 9;
-	static const int DISCHARGE_DAMAGE = 10
+	static const int DISCHARGE_DAMAGE = 10;
 	static const int CORROSION_DAMAGE = 11;
 	static const int LEAK_DAMAGE = 12;
 	static const int BURN_DAMAGE = 13;
