@@ -1,10 +1,8 @@
 /* Engine.cpp
 Copyright (c) 2014 by Michael Zahniser
-
 Endless Sky is free software: you can redistribute it and/or modify it under the
 terms of the GNU General Public License as published by the Free Software
 Foundation, either version 3 of the License, or (at your option) any later version.
-
 Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -634,14 +632,7 @@ void Engine::Step(bool isActive)
 				labels.emplace_back(pos, object, currentSystem, zoom);
 		}
 	}
-<<<<<<< HEAD
-	
-=======
 
-	if(flagship && flagship->IsOverheated())
-		Messages::Add("Your ship has overheated.", Messages::Importance::Highest);
-
->>>>>>> master
 	// Clear the HUD information from the previous frame.
 	info = Information();
 	if(flagship && flagship->Hull())
@@ -668,7 +659,7 @@ void Engine::Step(bool isActive)
 			if((step / 20) % 2)
 				info.SetBar("overcold blink", 1 - min(1., 20. * heat));
 		}
-		
+
 		info.SetBar("heat", min(1., 2 * (heat - 0.5)));
 		// If heat is above 100%, draw a second overlaid bar to indicate the
 		// total heat level.
@@ -1790,7 +1781,7 @@ void Engine::SendHails()
 		return;
 
 	// Generate a random hail message.
-	SendMessage(source, source->GetHail(player));
+	SendMessage(source, source->GetHail(player.GetSubstitutions()));
 }
 
 
