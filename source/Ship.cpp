@@ -1174,7 +1174,7 @@ void Ship::Place(Point position, Point velocity, Angle angle, bool isDeparting)
 	}
 	else
 		zoom = 1.;
-	if isDeparting
+	if(isDeparting)
 	{
 		heat = 0.5 * MaximumHeat();
 	} else {
