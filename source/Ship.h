@@ -1,10 +1,8 @@
 /* Ship.h
 Copyright (c) 2014 by Michael Zahniser
-
 Endless Sky is free software: you can redistribute it and/or modify it under the
 terms of the GNU General Public License as published by the Free Software
 Foundation, either version 3 of the License, or (at your option) any later version.
-
 Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -39,7 +37,6 @@ class Government;
 class Minable;
 class Phrase;
 class Planet;
-class PlayerInfo;
 class Projectile;
 class StellarObject;
 class System;
@@ -183,7 +180,7 @@ public:
 	// Get a random hail message, or set the object used to generate them. If no
 	// object is given the government's default will be used.
 	void SetHail(const Phrase &phrase);
-	std::string GetHail(const PlayerInfo &player) const;
+	std::string GetHail(std::map<std::string, std::string> &&subs) const;
 
 	// Set the commands for this ship to follow this timestep.
 	void SetCommands(const Command &command);
@@ -508,9 +505,6 @@ private:
 	std::vector<EnginePoint> reverseEnginePoints;
 	std::vector<EnginePoint> steeringEnginePoints;
 	Armament armament;
-	// While loading, keep track of which outfits already have been equipped.
-	// (That is, they were specified as linked to a given gun or turret point.)
-	std::map<const Outfit *, int> equipped;
 
 	// Various energy levels:
 	double shields = 0.;
@@ -541,13 +535,9 @@ private:
 	int crew = 0;
 	int pilotError = 0;
 	int pilotOkay = 0;
-<<<<<<< HEAD
 	double heatIntegrity = 0.;
 	double freezing = 0.;
-	
-=======
 
->>>>>>> master
 	// Current status of this particular ship:
 	const System *currentSystem = nullptr;
 	// A Ship can be locked into one of three special states: landing,
