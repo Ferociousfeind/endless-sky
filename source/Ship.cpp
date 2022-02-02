@@ -1768,7 +1768,7 @@ void Ship::Move(vector<Visual> &visuals, list<shared_ptr<Flotsam>> &flotsam)
 				Messages::Add("Your ship is overheating.", Messages::Importance::Low);
 		}
 	}
-	else if(heatIntegrity && Random::Int(100) < (100 / (1 + (3000 / heatIntegrity))))
+	else if(heatIntegrity && Random::Int(100) < (25 / (1 + (3000 / heatIntegrity))))
 	{
 		pilotError = 10 + Random::Int(20);
 		pilotOkay = 15 + Random::Int(30);
