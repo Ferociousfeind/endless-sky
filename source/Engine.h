@@ -190,7 +190,7 @@ private:
 	Point centerVelocity;
 	Point offset;
 	double offsetMultiplier = 0.;
-	constexpr static double offsetChange = 0.0025;
+	constexpr static double offsetChange = 0.996;
 	// Other information to display.
 	Information info;
 	std::vector<Target> targets;
