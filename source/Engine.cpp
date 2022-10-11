@@ -1491,11 +1491,11 @@ void Engine::CalculateStep()
 	if(flagship)
 	{
 		if(flagship->IsThrusting())
-			offsetMultiplier = offsetMultiplier >= 1. ? 1.
-				: offsetMultiplier + offsetChange;
+			// This asymptotically approaches 1.
+			offsetMultiplier = 1. - (1. - offsetMultiplier) * offsetChange;
 		else
-			offsetMultiplier = offsetMultiplier <= 0. ? 0.
-				: offsetMultiplier - offsetChange;
+			// This asymptotically approaches 0.
+			offsetMultiplier = offsetMultiplier * offsetChange;
 		offset = flagship->Velocity() * 20. * offsetMultiplier;
 		newCenter = Preferences::CameraAcceleration() == "on" ?
 			flagship->Position() + offset : Preferences::CameraAcceleration() == "reversed" ?
