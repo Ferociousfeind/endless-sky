@@ -333,6 +333,12 @@ void OutfitInfoDisplay::UpdateAttributes(const Outfit &outfit)
 			attributeValues.emplace_back(" ");
 			attributesHeight += 20;
 		}
+		else if(static_cast<string>(it.first) == "drag" && Outfit.Get("thrust"))
+		{
+			attributeLabels.emplace_back("top speed:");
+			attributeValues.emplace_back(Format::Number(outfit.Get("thrust") / it.second));
+			attributesHeight += 20;
+		}
 		else
 		{
 			attributeLabels.emplace_back(static_cast<string>(it.first) + ":");
