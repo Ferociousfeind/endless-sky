@@ -333,10 +333,16 @@ void OutfitInfoDisplay::UpdateAttributes(const Outfit &outfit)
 			attributeValues.emplace_back(" ");
 			attributesHeight += 20;
 		}
-		else if(static_cast<string>(it.first) == "drag" && Outfit.Get("thrust"))
+		else if(static_cast<string>(it.first) == "drag" && outfit.Get("thrust"))
+		{} // Do nothing, so as to place "top speed" in a more useful position.
+		else if(static_cast<string>(it.first) == "thrust" && outfit.Get("drag"))
 		{
 			attributeLabels.emplace_back("top speed:");
-			attributeValues.emplace_back(Format::Number(outfit.Get("thrust") / it.second));
+			attributeValues.emplace_back(Format::Number(it.second * scale / outfit.Get("drag")));
+			attributesHeight += 20;
+
+			attributeLabels.emplace_back(static_cast<string>(it.first) + ":");
+			attributeValues.emplace_back(Format::Number(it.second * scale) + units);
 			attributesHeight += 20;
 		}
 		else
