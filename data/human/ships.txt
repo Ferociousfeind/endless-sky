@@ -1836,12 +1836,12 @@ ship "Gunboat"
 		"Heavy Laser Turret"
 		
 		"RT-I Radiothermal"
-		"LP144a Battery Pack"
+		"LP072a Battery Pack"
 		"D14-RN Shield Generator"
 		"Small Radar Jammer"
-		"Cargo Scanner"
-		"Outfit Scanner"
-		"Tactical Scanner"
+		"Cargo Scanner" 9
+		"Outfit Scanner" 3
+		"Tactical Scanner" 3
 		"Brig"
 		
 		"X3700 Ion Thruster"
