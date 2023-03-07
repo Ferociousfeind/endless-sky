@@ -2460,11 +2460,11 @@ void Ship::DoGeneration()
 
 		// Apply active cooling. The fraction of full cooling to apply equals
 		// your ship's current fraction of its maximum temperature.
-		double activeCooling = coolingEfficiency * attributes.Get("active cooling");
-		if(activeCooling && heat > 0. && energy >= 0.)
+		if(heat > 0. && energy >= 0.)
 		{
 			// Although it's a misuse of this feature, handle the case where
 			// "active cooling" does not require any energy.
+			double activeCooling = coolingEfficiency * attributes.Get("active cooling");
 			double coolingEnergy = attributes.Get("cooling energy");
 			if(coolingEnergy)
 			{
